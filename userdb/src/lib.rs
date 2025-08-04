@@ -1,9 +1,9 @@
 use std::sync::LazyLock;
 
-use redb::{Database, ReadableTable as _, TableDefinition, WriteTransaction};
+use redb::{Database, ReadTransaction, ReadableTable as _, TableDefinition, WriteTransaction};
 use spdlog::{error, info};
 
-const QQ_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");
+const ID_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");
 
 static DATABASE: LazyLock<Database> = LazyLock::new(|| {
     info!("initializing database...");
@@ -11,7 +11,7 @@ static DATABASE: LazyLock<Database> = LazyLock::new(|| {
         .inspect_err(|e| error!("failed initializing db: {e}"))
         .unwrap();
     let write_txn = db.begin_write().unwrap();
-    _ = write_txn.open_table(QQ_USERID);
+    _ = write_txn.open_table(ID_USERID);
     db
 });
 
@@ -19,11 +19,23 @@ pub fn write_txn() -> Result<WriteTransaction, redb::Error> {
     Ok(DATABASE.begin_write()?)
 }
 
+pub fn read_txn() -> Result<ReadTransaction, redb::Error> {
+    Ok(DATABASE.begin_read()?)
+}
+
+pub fn query_user(id: i64) -> Result<Option<u32>, redb::Error> {
+    let txn = read_txn()?;
+    {
+        let table = txn.open_table(ID_USERID)?;
+        Ok(table.get(id)?.map(|v| v.value()))
+    }
+}
+
 pub fn unbind_user(id: i64) -> Result<bool, redb::Error> {
     let txn = write_txn()?;
     let result;
     {
-        let mut table = txn.open_table(QQ_USERID)?;
+        let mut table = txn.open_table(ID_USERID)?;
         result = table.remove(id)?.is_some();
     }
 
@@ -31,10 +43,10 @@ pub fn unbind_user(id: i64) -> Result<bool, redb::Error> {
     Ok(result)
 }
 
-pub fn record_userid(id: i64, user_id: u32) -> Result<Option<u32>, redb::Error> {
-    let txn = write_txn()?;
+pub async fn record_userid(id: i64, user_id: u32) -> Result<Option<u32>, redb::Error> {
+    let txn = tokio::task::spawn_blocking(|| write_txn()).await.unwrap()?;
     {
-        let mut table = txn.open_table(QQ_USERID)?;
+        let mut table = txn.open_table(ID_USERID)?;
         if let Some(uid) = table.get(id)? {
             return Ok(Some(uid.value()));
         }

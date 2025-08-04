@@ -149,10 +149,10 @@ dependencies = [
 name = "bind_user"
 version = "0.1.0"
 dependencies = [
+ "common-utils",
  "kovi",
  "nyquest-preset",
  "sdgb-api",
- "serde",
  "shared-client",
  "spdlog-rs",
  "userdb",
@@ -256,6 +256,16 @@ name = "colorchoice"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b05b61dc5112cbb17e4b6cd61790d9845d13888356391624cbe7e41efeac1e75"
+
+[[package]]
+name = "common-utils"
+version = "0.1.0"
+dependencies = [
+ "kovi",
+ "nyquest-preset",
+ "sdgb-api",
+ "serde",
+]
 
 [[package]]
 name = "console"
@@ -627,6 +637,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
+name = "help-commands"
+version = "0.1.0"
+dependencies = [
+ "common-utils",
+ "kovi",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -844,6 +862,7 @@ name = "maimaibot"
 version = "0.1.0"
 dependencies = [
  "bind_user",
+ "help-commands",
  "kovi",
  "kovi-plugin-cmd",
  "nyquest-preset",
@@ -851,6 +870,7 @@ dependencies = [
  "ping",
  "snafu",
  "spdlog-rs",
+ "user-region",
 ]
 
 [[package]]
@@ -1823,11 +1843,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a1a07cc7db3810833284e8d372ccdc6da29741639ecc70c9ec107df0fa6154c"
 
 [[package]]
+name = "user-region"
+version = "0.1.0"
+dependencies = [
+ "common-utils",
+ "kovi",
+ "nyquest-preset",
+ "sdgb-api",
+ "shared-client",
+ "spdlog-rs",
+ "userdb",
+]
+
+[[package]]
 name = "userdb"
 version = "0.1.0"
 dependencies = [
  "redb",
  "spdlog-rs",
+ "tokio",
 ]
 
 [[package]]

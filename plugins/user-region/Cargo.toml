@@ -1,12 +1,12 @@
 [package]
-name = "bind_user"
+name = "user-region"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 kovi.workspace = true
-sdgb-api.workspace = true
 spdlog-rs.workspace = true
+sdgb-api.workspace = true
 nyquest-preset.workspace = true
 
 userdb.workspace = true

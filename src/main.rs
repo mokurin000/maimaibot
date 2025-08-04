@@ -23,6 +23,6 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
     })?;
     spdlog::swap_default_logger(logger);
 
-    build_bot!(kovi_plugin_cmd, ping, bind_user, phigros_tips).run();
+    build_bot!(kovi_plugin_cmd, ping, bind_user, phigros_tips, user_region, help_commands).run();
     Ok(())
 }
