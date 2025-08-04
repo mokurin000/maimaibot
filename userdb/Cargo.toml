@@ -1,0 +1,8 @@
+[package]
+name = "userdb"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+redb = "2.6.2"
+spdlog-rs = { workspace = true }

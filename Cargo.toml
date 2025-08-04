@@ -1,0 +1,37 @@
+[package]
+name = "maimaibot"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+kovi.workspace = true
+spdlog-rs.workspace = true
+nyquest-preset.workspace = true
+
+kovi-plugin-cmd = "0.3.0"
+
+snafu = "0.8.6"
+
+ping = { version = "0.1.0", path = "plugins/ping" }
+bind_user = { version = "0.1.0", path = "plugins/bind_user" }
+
+[workspace]
+members = ["plugins/bind_user", "plugins/ping", "shared-client", "userdb"]
+
+[workspace.dependencies]
+sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = "0.1.0", default-features = false, features = [
+    "tokio",
+] }
+
+nyquest-preset = { version = "0.3.0", features = ["async"] }
+
+kovi = "0.12.4"
+spdlog-rs = { version = "0.4.3", default-features = false, features = [
+    "level-debug",
+    "release-level-info",
+] }
+serde = "1"
+tokio = { version = "1", features = ["sync"] }
+
+userdb = { path = "userdb" }
+shared-client = { path = "shared-client" }
