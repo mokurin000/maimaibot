@@ -14,9 +14,10 @@ snafu = "0.8.6"
 
 ping = { version = "0.1.0", path = "plugins/ping" }
 bind_user = { version = "0.1.0", path = "plugins/bind_user" }
+phigros-tips = { version = "0.1.0", path = "plugins/phigros-tips" }
 
 [workspace]
-members = ["plugins/bind_user", "plugins/ping", "shared-client", "userdb"]
+members = ["plugins/bind_user", "plugins/phigros-tips", "plugins/ping", "shared-client", "userdb"]
 
 [workspace.dependencies]
 sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = "0.1.0", default-features = false, features = [
@@ -33,5 +34,13 @@ spdlog-rs = { version = "0.4.3", default-features = false, features = [
 serde = "1"
 tokio = { version = "1", features = ["sync"] }
 
+fastrand = "2.3.0"
+
 userdb = { path = "userdb" }
 shared-client = { path = "shared-client" }
+
+[profile.release]
+lto = "thin"
+strip = true
+incremental = true
+codegen-units = 4
