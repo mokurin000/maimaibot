@@ -8,7 +8,7 @@ use spdlog::error;
 
 use common_utils::{reply_event, user_preview};
 use shared_client::nyquest_client;
-use userdb::{record_df_token, unbind_user};
+use userdb::{record_df_token, unbind_user, unbind_user_df};
 
 #[kovi::plugin]
 async fn start() {
@@ -100,6 +100,14 @@ async fn start() {
                     Ok(true) => reply_event(event, "绑定成功！可以催促开发真的做水鱼导入功能了哦"),
                 };
             }
+            &["/dfunbind"] => match unbind_user_df(sender_id) {
+                Err(e) => {
+                    error!("redb error: {e}");
+                    reply_event(event, "解绑失败~ 请联系管理员或稍后重试");
+                }
+                Ok(true) => reply_event(event, "解绑成功！"),
+                Ok(false) => reply_event(event, "未绑定水鱼 token 哦"),
+            },
             _ => {}
         }
 
