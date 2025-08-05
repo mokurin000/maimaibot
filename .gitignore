@@ -5,3 +5,6 @@
 
 /voices/Voice_Partner*
 /voices/silk-encoder*
+
+/.python-version
+/.venv

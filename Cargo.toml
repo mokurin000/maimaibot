@@ -22,16 +22,16 @@ import-records = { version = "0.1.0", path = "plugins/import-records" }
 
 [workspace]
 members = [
-    "common-utils",
+    "libs/common-utils",
+    "libs/userdb",
+    "libs/shared-client",
     "plugins/bind_user",
     "plugins/phigros-tips",
     "plugins/ping",
     "plugins/user-region",
-    "shared-client",
-    "userdb",
-    "common-utils",
     "plugins/help-commands",
-    "plugins/rand-voice", "plugins/import-records",
+    "plugins/rand-voice",
+    "plugins/import-records",
 ]
 
 [workspace.dependencies]
@@ -52,9 +52,9 @@ tokio = { version = "1", features = ["sync"] }
 
 fastrand = "2.3.0"
 
-userdb = { path = "userdb" }
-shared-client = { path = "shared-client" }
-common-utils = { path = "common-utils" }
+userdb = { path = "libs/userdb" }
+shared-client = { path = "libs/shared-client" }
+common-utils = { path = "libs/common-utils" }
 
 [profile.release]
 lto = "thin"
