@@ -28,6 +28,10 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
         .as_slice()
     {
         &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
+        &["/playsound", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
+            PathBuf::from(format!("voices/Voice_000001/stream_{voice}.silk")),
+        )
+        .ok()?,
         &["/playsound", partner_id, voice_id]
             if let Ok(partner) = partner_id.parse::<u32>()
                 && let Ok(voice) = voice_id.parse::<u32>() =>
@@ -45,7 +49,9 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
     if !sound_path.exists() {
         reply_event(
             event,
-            "语音文件未找到! 😟\n伙伴id: 1,11~33 语音id: 1~118\n部分伙伴没有全部语音，1 为迪拉熊",
+            "语音文件未找到! 😟
+伙伴id: 1/11~33, 语音id: 1~118, 系统音id: 1~74,76~159
+部分伙伴没有全部语音",
         );
         return None;
     }
