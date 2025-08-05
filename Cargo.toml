@@ -43,6 +43,8 @@ nyquest-preset = { version = "0.3.0", features = ["async"] }
 sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = "0.1.0", default-features = false, features = [
     "tokio",
 ] }
+music-db = { git = "https://github.com/mokurin000/sdgb-utils-rs.git" }
+
 serde = "1"
 serde_json = "1"
 

@@ -32,6 +32,7 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
         help_commands,
         play_voice,
         pcrt_plot,
+        import_records,
     )
     .run();
     Ok(())

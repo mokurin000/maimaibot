@@ -5,3 +5,15 @@ edition = "2024"
 
 [dependencies]
 kovi.workspace = true
+serde.workspace = true
+snafu.workspace = true
+spdlog-rs.workspace = true
+
+music-db.workspace = true
+sdgb-api.workspace = true
+
+common-utils.workspace = true
+userdb.workspace = true
+shared-client.workspace = true
+
+nyquest-preset.workspace = true

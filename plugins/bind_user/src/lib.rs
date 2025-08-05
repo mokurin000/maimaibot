@@ -97,7 +97,7 @@ async fn start() {
                         reply_event(event, "内部错误😰 请联系管理员处理!")
                     }
                     Ok(false) => reply_event(event, "已经绑定了喵~ /dfunbind 来解绑哦"),
-                    Ok(true) => reply_event(event, "绑定成功！可以催促开发真的做水鱼导入功能了哦"),
+                    Ok(true) => reply_event(event, "绑定成功！"),
                 };
             }
             &["/dfunbind"] => match unbind_user_df(sender_id) {
