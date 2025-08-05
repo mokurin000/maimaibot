@@ -11,7 +11,7 @@ use snafu::Report;
 use spdlog::{error, info};
 use userdb::query_user;
 
-pub const CACHE_DAYS: u64 = 3;
+pub const CACHE_MINUTES: u64 = 60;
 
 #[kovi::plugin]
 async fn start() {
@@ -45,7 +45,7 @@ async fn start() {
         if image_path.metadata().is_ok_and(|m| {
             m.modified().is_ok_and(|m| {
                 m.elapsed()
-                    .is_ok_and(|dur| dur.as_secs() < 60 * 60 * 24 * CACHE_DAYS)
+                    .is_ok_and(|dur| dur.as_secs() < 60 * CACHE_MINUTES)
             })
         }) {
             reply_event(
