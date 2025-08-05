@@ -14,6 +14,8 @@ async fn main() {
 /bindqr - 通过二维码绑定 userId
 /binduid - 通过 userId 绑定 userId
 /unbind - 解绑 userId
+/dfbind - 绑定水鱼 token
+/dfunbind - 解绑水鱼 token
 /tip - 随机 Phigros tip
 /maitip - 随机迪拉熊语录
 /makenoise - 随机语音

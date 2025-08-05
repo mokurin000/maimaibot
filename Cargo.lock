@@ -707,6 +707,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb56e1aa765b4b4f3aadfab769793b7087bb03a4ea4920644a6d238e2df5b9ed"
 
 [[package]]
+name = "import-records"
+version = "0.1.0"
+dependencies = [
+ "kovi",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -863,6 +870,7 @@ version = "0.1.0"
 dependencies = [
  "bind_user",
  "help-commands",
+ "import-records",
  "kovi",
  "kovi-plugin-cmd",
  "nyquest-preset",

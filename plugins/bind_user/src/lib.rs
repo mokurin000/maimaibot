@@ -35,18 +35,18 @@ async fn start() {
                 ),
             },
             &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
-                if let Ok(preview) = user_preview(client, user_id).await {
-                    if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
-                        reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
-                    } else {
+                if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
+                    reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
+                } else {
+                    if let Ok(preview) = user_preview(client, user_id).await {
                         reply_event(
                             event,
                             Message::new()
                                 .add_text(format!("已成功绑定到 userId {user_id}\n\n{preview}")),
                         );
+                    } else {
+                        reply_event(event, "无效的 userId ~");
                     }
-                } else {
-                    reply_event(event, "无效的 userId ~");
                 }
             }
             &["/bindqr", qrcode_content] => {

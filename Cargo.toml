@@ -18,6 +18,7 @@ phigros-tips = { version = "0.1.0", path = "plugins/phigros-tips" }
 user-region = { version = "0.1.0", path = "plugins/user-region" }
 help-commands = { version = "0.1.0", path = "plugins/help-commands" }
 rand-voice = { version = "0.1.0", path = "plugins/rand-voice" }
+import-records = { version = "0.1.0", path = "plugins/import-records" }
 
 [workspace]
 members = [
@@ -30,7 +31,7 @@ members = [
     "userdb",
     "common-utils",
     "plugins/help-commands",
-    "plugins/rand-voice",
+    "plugins/rand-voice", "plugins/import-records",
 ]
 
 [workspace.dependencies]
