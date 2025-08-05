@@ -17,7 +17,7 @@ bind_user = { version = "0.1.0", path = "plugins/bind_user" }
 phigros-tips = { version = "0.1.0", path = "plugins/phigros-tips" }
 user-region = { version = "0.1.0", path = "plugins/user-region" }
 help-commands = { version = "0.1.0", path = "plugins/help-commands" }
-rand-voice = { version = "0.1.0", path = "plugins/rand-voice" }
+play-voice = { version = "0.1.0", path = "plugins/play-voice" }
 import-records = { version = "0.1.0", path = "plugins/import-records" }
 pcrt-plot = { version = "0.1.0", path = "plugins/pcrt-plot" }
 
@@ -31,8 +31,9 @@ members = [
     "plugins/ping",
     "plugins/user-region",
     "plugins/help-commands",
-    "plugins/rand-voice",
-    "plugins/import-records", "plugins/pcrt-plot",
+    "plugins/play-voice",
+    "plugins/import-records",
+    "plugins/pcrt-plot",
 ]
 
 [workspace.dependencies]

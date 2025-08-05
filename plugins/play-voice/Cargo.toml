@@ -1,5 +1,5 @@
 [package]
-name = "rand-voice"
+name = "play-voice"
 version = "0.1.0"
 edition = "2024"
 
