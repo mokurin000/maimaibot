@@ -12,7 +12,7 @@ async fn main() {
             event,
             "/help - 查看帮助
 
-            /bindqr - 通过二维码绑定 userId
+/bindqr - 通过二维码绑定 userId
 /binduid - 通过 userId 绑定 userId
 /unbind - 解绑 userId
 
@@ -27,6 +27,7 @@ async fn main() {
 /playsound 语音id - 指定系统音
 /playsound 伙伴id 语音id - 指定语音
 
+/pcrt - 绘制 PlayCount-Rating 曲线
 盒我 - 获取账户登录记录",
         );
     });
