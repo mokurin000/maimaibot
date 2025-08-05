@@ -1,14 +1,17 @@
 use std::{
     io::Write,
+    path::{PathBuf, absolute},
     process::{Command, Stdio},
 };
 
 use common_utils::reply_event;
-use kovi::{PluginBuilder as plugin, serde_json, tokio::task::spawn_blocking};
+use kovi::{Message, PluginBuilder as plugin, serde_json, tokio::task::spawn_blocking};
 use sdgb_api::title::helper::get_user_all_music;
 use snafu::Report;
 use spdlog::{error, info};
 use userdb::query_user;
+
+pub const CACHE_DAYS: u64 = 3;
 
 #[kovi::plugin]
 async fn start() {
@@ -31,6 +34,29 @@ async fn start() {
             }
             Ok(Some(user_id)) => user_id,
         };
+
+        let rela_img_path = PathBuf::from(format!("plot_cache/{user_id}-pc-rating-linear.png"));
+        let Ok(image_path) = absolute(rela_img_path) else {
+            error!("failed to make absolute image path!");
+            return Report::ok();
+        };
+
+        // use cache in 1 day
+        if image_path.metadata().is_ok_and(|m| {
+            m.modified().is_ok_and(|m| {
+                m.elapsed()
+                    .is_ok_and(|dur| dur.as_secs() < 60 * 60 * 24 * CACHE_DAYS)
+            })
+        }) {
+            reply_event(
+                event,
+                Message::new().add_image(&image_path.to_string_lossy()),
+            );
+            return Report::ok();
+        }
+
+        reply_event(&event, "少女祈祷中...");
+
         let resp = match get_user_all_music(client, user_id).await {
             Ok(r) => r,
             Err(e) => {
@@ -50,7 +76,14 @@ async fn start() {
         let gen_result = draw_plot(json).await;
         info!("generated plot: {gen_result:?}");
 
-        reply_event(event, "图像已生成，但是暂未支持显示！");
+        if image_path.exists() {
+            reply_event(
+                event,
+                Message::new().add_image(&image_path.to_string_lossy()),
+            );
+        } else {
+            reply_event(event, "图像生成失败🤯 请联系管理员修复");
+        }
         Report::ok()
     });
 }

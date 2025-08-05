@@ -1251,6 +1251,7 @@ dependencies = [
  "kovi",
  "serde",
  "snafu",
+ "spdlog-rs",
 ]
 
 [[package]]

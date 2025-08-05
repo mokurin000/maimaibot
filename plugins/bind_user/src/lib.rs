@@ -34,6 +34,12 @@ async fn start() {
                     },
                 ),
             },
+            &["/binduid"] => {
+                reply_event(event, "/binduid xxxxxxxx\n八位userId（绝密）");
+            }
+            &["/bindqr"] => {
+                reply_event(event, "/bindqr SGWCMAID... (上机二维码解码内容)");
+            }
             &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
                 if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
                     reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");

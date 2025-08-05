@@ -12,3 +12,5 @@
 *.pyc
 
 __pycache__
+
+/browser_data

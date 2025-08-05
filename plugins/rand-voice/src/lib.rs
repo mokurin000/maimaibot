@@ -4,7 +4,8 @@ use std::{
     sync::LazyLock,
 };
 
-use kovi::{Message, PluginBuilder as plugin, log::info, serde_json};
+use kovi::{Message, PluginBuilder as plugin, serde_json};
+use spdlog::info;
 
 use crate::model::{VoiceData, VoiceMessage};
 

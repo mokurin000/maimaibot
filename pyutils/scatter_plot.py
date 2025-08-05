@@ -1,3 +1,4 @@
+import asyncio
 from sys import stdin
 from decimal import Decimal
 from functools import reduce
@@ -10,6 +11,7 @@ from pyecharts.charts import Scatter
 
 
 from helpers import query_music_db, find_level, dx_rating
+from scnapshot_html import render
 
 
 def calculate_dxrating(music: dict):
@@ -64,12 +66,18 @@ def init_chart(
         )
         .set_series_opts()
         .set_global_opts(
+            title_opts=opts.TitleOpts(
+                title="pc v.s. rating",
+                subtitle="只计入最高A以上rank的曲目，按游玩track总数",
+            ),
             xaxis_opts=opts.AxisOpts(
+                name="总游玩曲目-次数",
                 type_=x_type,
                 min_=x_min,
                 max_=x_max,
             ),
             yaxis_opts=opts.AxisOpts(
+                name="",
                 type_="value",
                 axistick_opts=opts.AxisTickOpts(is_show=True),
                 splitline_opts=opts.SplitLineOpts(is_show=True),
@@ -89,18 +97,25 @@ def init_chart(
     )
 
 
-x_max = (x_data[-1] // 50 * 50) + 50
-y_max = min(330, (y_data[-1] // 50 * 50) + 50)
+async def main():
+    x_max = (x_data[-1] // 50 * 50) + 50
+    y_max = min(330, (y_data[-1] // 50 * 50) + 50)
 
-init_chart(
-    "value",
-    1,
-    x_max,
-    y_max=y_max,
-).render(f"plot_cache/{user_id}-pc-rating-linear.html")
-init_chart(
-    "log",
-    (x_max // 100) or 10,
-    x_max,
-    y_max=y_max,
-).render(f"plot_cache/{user_id}-pc-rating-log.html")
+    output_html = f"plot_cache/{user_id}-pc-rating-linear.html"
+    output_png = f"plot_cache/{user_id}-pc-rating-linear.png"
+
+    gtype = "value"
+    if gtype == "log":
+        x_max = (x_max // 100) or 10
+    init_chart(
+        gtype,
+        x_min=1,
+        x_max=x_max,
+        y_max=y_max,
+    ).render(output_html)
+
+    await render(output_html, output_png)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
