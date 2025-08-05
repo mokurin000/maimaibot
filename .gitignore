@@ -3,3 +3,5 @@
 /kovi.*.toml
 /userdata.db
 
+/voices/Voice_Partner*
+/voices/silk-encoder*

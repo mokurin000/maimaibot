@@ -10,13 +10,14 @@ nyquest-preset.workspace = true
 
 kovi-plugin-cmd = "0.3.0"
 
-snafu = "0.8.6"
+snafu = { workspace = true }
 
 ping = { version = "0.1.0", path = "plugins/ping" }
 bind_user = { version = "0.1.0", path = "plugins/bind_user" }
 phigros-tips = { version = "0.1.0", path = "plugins/phigros-tips" }
 user-region = { version = "0.1.0", path = "plugins/user-region" }
 help-commands = { version = "0.1.0", path = "plugins/help-commands" }
+rand-voice = { version = "0.1.0", path = "plugins/rand-voice" }
 
 [workspace]
 members = [
@@ -27,7 +28,9 @@ members = [
     "plugins/user-region",
     "shared-client",
     "userdb",
-    "common-utils", "plugins/help-commands",
+    "common-utils",
+    "plugins/help-commands",
+    "plugins/rand-voice",
 ]
 
 [workspace.dependencies]
@@ -35,6 +38,7 @@ sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = 
     "tokio",
 ] }
 
+snafu = "0.8.6"
 nyquest-preset = { version = "0.3.0", features = ["async"] }
 
 kovi = "0.12.4"

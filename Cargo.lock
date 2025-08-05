@@ -868,6 +868,7 @@ dependencies = [
  "nyquest-preset",
  "phigros-tips",
  "ping",
+ "rand-voice",
  "snafu",
  "spdlog-rs",
  "user-region",
@@ -1218,6 +1219,16 @@ checksum = "6db2770f06117d490610c7488547d543617b21bfa07796d7a12f6f1bd53850d1"
 dependencies = [
  "rand_chacha",
  "rand_core",
+]
+
+[[package]]
+name = "rand-voice"
+version = "0.1.0"
+dependencies = [
+ "fastrand",
+ "kovi",
+ "serde",
+ "snafu",
 ]
 
 [[package]]

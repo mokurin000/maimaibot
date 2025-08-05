@@ -16,6 +16,7 @@ async fn main() {
 /unbind - 解绑 userId
 /tip - 随机 Phigros tip
 /maitip - 随机迪拉熊语录
+/makenoise - 随机语音
 盒我 - 获取账户登录记录",
         );
     });
