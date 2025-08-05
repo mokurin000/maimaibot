@@ -8,5 +8,6 @@ dependencies = [
     "orjson>=3.11.1",
     "playwright>=1.54.0",
     "polars>=1.32.0",
+    "pydub>=0.25.1",
     "pyecharts>=2.0.8",
 ]

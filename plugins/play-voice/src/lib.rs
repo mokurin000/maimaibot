@@ -1,10 +1,13 @@
+#![feature(if_let_guard)]
+
 use std::{
     fs::read_dir,
     path::{Path, PathBuf, absolute},
-    sync::LazyLock,
+    sync::{Arc, LazyLock},
 };
 
-use kovi::{Message, PluginBuilder as plugin, serde_json};
+use common_utils::reply_event;
+use kovi::{Message, MsgEvent, PluginBuilder as plugin, serde_json};
 use spdlog::info;
 
 use crate::model::{VoiceData, VoiceMessage};
@@ -14,27 +17,49 @@ mod model;
 #[kovi::plugin]
 async fn main() {
     info!("found {} voice files", VOICE_FILES.len());
+    plugin::on_msg(handle_msg);
+}
 
-    plugin::on_msg(|event| async move {
-        if event.borrow_text() != Some("/makenoise") {
-            return;
+async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
+    let sound_path = match event
+        .borrow_text()?
+        .split_whitespace()
+        .collect::<Vec<&str>>()
+        .as_slice()
+    {
+        &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
+        &["/playsound", partner_id, voice_id]
+            if let Ok(partner) = partner_id.parse::<u32>()
+                && let Ok(voice) = voice_id.parse::<u32>() =>
+        {
+            absolute(PathBuf::from(format!(
+                "voices/Voice_Partner_{partner:06}/stream_{voice}.silk"
+            )))
+            .ok()?
         }
+        _ => return None,
+    };
 
-        let Some(music) = fastrand::choice(&*VOICE_FILES) else {
-            return;
-        };
+    info!("selected: {}", sound_path.to_string_lossy());
 
-        info!("selected: {}", music.to_string_lossy());
+    if !sound_path.exists() {
+        reply_event(
+            event,
+            "语音文件未找到! 😟\n伙伴id: 1,11~33 语音id: 1~118\n部分伙伴没有全部语音，1 为迪拉熊",
+        );
+        return None;
+    }
 
-        if let Ok(value) = serde_json::to_value(VoiceMessage {
-            r#type: "record",
-            data: VoiceData {
-                file: music.clone(),
-            },
-        }) {
-            event.reply(Message::new().add_segment(value));
-        }
-    });
+    if let Ok(value) = serde_json::to_value(VoiceMessage {
+        r#type: "record",
+        data: VoiceData {
+            file: sound_path.clone(),
+        },
+    }) {
+        event.reply(Message::new().add_segment(value));
+    }
+
+    Some(())
 }
 
 static VOICE_FILES: LazyLock<Vec<PathBuf>> = LazyLock::new(|| {

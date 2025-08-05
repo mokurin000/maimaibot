@@ -18,7 +18,8 @@ async fn main() {
 /dfunbind - 解绑水鱼 token
 /tip - 随机 Phigros tip
 /maitip - 随机迪拉熊语录
-/makenoise - 随机语音
+/playsound - 随机语音
+/playsound 伙伴id 语音id - 指定语音
 盒我 - 获取账户登录记录",
         );
     });

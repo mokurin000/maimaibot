@@ -8,5 +8,6 @@ kovi.workspace = true
 snafu.workspace = true
 fastrand.workspace = true
 serde.workspace = true
-
 spdlog-rs.workspace = true
+
+common-utils.workspace = true

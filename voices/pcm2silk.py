@@ -23,7 +23,7 @@ def main():
         lambda a, b: a + b,
         [[path.join(d, f) for f in listdir(d)] for d in listdir(".") if path.isdir(d)],
     )
-    with Pool(processes=cpu_count() * 4) as pool:
+    with Pool(processes=cpu_count() * 2) as pool:
         pool.map(process_pcm, files)
 
 
