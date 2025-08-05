@@ -1,0 +1,14 @@
+[package]
+name = "pcrt-plot"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+kovi.workspace = true
+sdgb-api.workspace = true
+spdlog-rs.workspace = true
+snafu.workspace = true
+
+userdb.workspace = true
+shared-client.workspace = true
+common-utils.workspace = true

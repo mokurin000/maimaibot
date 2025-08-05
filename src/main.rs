@@ -30,7 +30,8 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
         phigros_tips,
         user_region,
         help_commands,
-        rand_voice
+        rand_voice,
+        pcrt_plot,
     )
     .run();
     Ok(())

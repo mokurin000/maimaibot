@@ -874,6 +874,7 @@ dependencies = [
  "kovi",
  "kovi-plugin-cmd",
  "nyquest-preset",
+ "pcrt-plot",
  "phigros-tips",
  "ping",
  "rand-voice",
@@ -1149,6 +1150,19 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-targets 0.52.6",
+]
+
+[[package]]
+name = "pcrt-plot"
+version = "0.1.0"
+dependencies = [
+ "common-utils",
+ "kovi",
+ "sdgb-api",
+ "shared-client",
+ "snafu",
+ "spdlog-rs",
+ "userdb",
 ]
 
 [[package]]

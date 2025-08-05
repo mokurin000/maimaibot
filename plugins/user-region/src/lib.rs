@@ -25,14 +25,14 @@ async fn main() {
 
 async fn handle_region(event: Arc<MsgEvent>, client: &AsyncClient) -> Option<()> {
     match query_user(event.user_id) {
-        Ok(None) => reply_event(event, "当前账号未绑定 userId 哦~")?,
+        Ok(None) => reply_event(event, "当前账号未绑定 userId 哦~"),
         Err(e) => {
             error!("redb error: {e}");
-            reply_event(event, "查询uid失败~ 请联系管理员或稍后重试")?
+            reply_event(event, "查询uid失败~ 请联系管理员或稍后重试")
         }
         Ok(Some(user_id)) => {
             if let Ok(regions) = user_region(client, user_id).await {
-                reply_event(event, format!("历史游玩地区如下:\n\n{regions}"))?
+                reply_event(event, format!("历史游玩地区如下:\n\n{regions}"))
             }
         }
     }

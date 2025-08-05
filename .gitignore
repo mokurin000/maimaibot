@@ -8,3 +8,5 @@
 
 /.python-version
 /.venv
+
+*.pyc

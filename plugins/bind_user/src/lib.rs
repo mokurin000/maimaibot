@@ -23,7 +23,7 @@ async fn start() {
             &["/unbind"] => match unbind_user(sender_id) {
                 Err(e) => {
                     error!("redb error: {e}");
-                    reply_event(event, "解绑失败~ 请联系管理员或稍后重试")?;
+                    reply_event(event, "解绑失败~ 请联系管理员或稍后重试");
                 }
                 Ok(removed) => reply_event(
                     event,
@@ -32,7 +32,7 @@ async fn start() {
                     } else {
                         "目前还没有绑定喵~"
                     },
-                )?,
+                ),
             },
             &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
                 if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
@@ -75,13 +75,13 @@ async fn start() {
                     }
                     Err(e) => {
                         error!("login error: {e}");
-                        reply_event(event, "登录失败~ 请联系管理员或稍后重试")?;
+                        reply_event(event, "登录失败~ 请联系管理员或稍后重试");
                     }
                 };
             }
             &["/dfbind", token] => {
                 if !(token.is_ascii() && token.len() == 128) {
-                    reply_event(event, "疑似无效token喵~ 请检查是否复制了 “成绩导入token”")?;
+                    reply_event(event, "疑似无效token喵~ 请检查是否复制了 “成绩导入token”");
                     return None;
                 }
 

@@ -19,6 +19,7 @@ user-region = { version = "0.1.0", path = "plugins/user-region" }
 help-commands = { version = "0.1.0", path = "plugins/help-commands" }
 rand-voice = { version = "0.1.0", path = "plugins/rand-voice" }
 import-records = { version = "0.1.0", path = "plugins/import-records" }
+pcrt-plot = { version = "0.1.0", path = "plugins/pcrt-plot" }
 
 [workspace]
 members = [
@@ -31,26 +32,27 @@ members = [
     "plugins/user-region",
     "plugins/help-commands",
     "plugins/rand-voice",
-    "plugins/import-records",
+    "plugins/import-records", "plugins/pcrt-plot",
 ]
 
 [workspace.dependencies]
+tokio = { version = "1", features = ["sync"] }
+
+nyquest-preset = { version = "0.3.0", features = ["async"] }
 sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = "0.1.0", default-features = false, features = [
     "tokio",
 ] }
+serde = "1"
+serde_json = "1"
 
+fastrand = "2.3.0"
 snafu = "0.8.6"
-nyquest-preset = { version = "0.3.0", features = ["async"] }
-
-kovi = "0.12.4"
 spdlog-rs = { version = "0.4.3", default-features = false, features = [
     "level-debug",
     "release-level-info",
 ] }
-serde = "1"
-tokio = { version = "1", features = ["sync"] }
 
-fastrand = "2.3.0"
+kovi = "0.12.4"
 
 userdb = { path = "libs/userdb" }
 shared-client = { path = "libs/shared-client" }
