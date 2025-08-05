@@ -8,7 +8,7 @@ use spdlog::error;
 
 use common_utils::{reply_event, user_preview};
 use shared_client::nyquest_client;
-use userdb::unbind_user;
+use userdb::{record_df_token, unbind_user};
 
 #[kovi::plugin]
 async fn start() {
@@ -22,8 +22,8 @@ async fn start() {
         match segments.as_slice() {
             &["/unbind"] => match unbind_user(sender_id) {
                 Err(e) => {
-                    reply_event(event, "解绑失败~ 请联系管理员或稍后重试");
                     error!("redb error: {e}");
+                    reply_event(event, "解绑失败~ 请联系管理员或稍后重试")?;
                 }
                 Ok(removed) => reply_event(
                     event,
@@ -32,7 +32,7 @@ async fn start() {
                     } else {
                         "目前还没有绑定喵~"
                     },
-                ),
+                )?,
             },
             &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
                 if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
@@ -74,9 +74,24 @@ async fn start() {
                         reply_event(event, "二维码已失效...");
                     }
                     Err(e) => {
-                        reply_event(event, "登录失败~ 请联系管理员或稍后重试");
                         error!("login error: {e}");
+                        reply_event(event, "登录失败~ 请联系管理员或稍后重试")?;
                     }
+                };
+            }
+            &["/dfbind", token] => {
+                if !(token.is_ascii() && token.len() == 128) {
+                    reply_event(event, "疑似无效token喵~ 请检查是否复制了 “成绩导入token”")?;
+                    return None;
+                }
+
+                match record_df_token(sender_id, token).await {
+                    Err(e) => {
+                        error!("insert df token failed: {e}");
+                        reply_event(event, "内部错误😰 请联系管理员处理!")
+                    }
+                    Ok(false) => reply_event(event, "已经绑定了喵~ /dfunbind 来解绑哦"),
+                    Ok(true) => reply_event(event, "绑定成功！可以催促开发真的做水鱼导入功能了哦"),
                 };
             }
             _ => {}

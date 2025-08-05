@@ -96,7 +96,7 @@ DX底分: {rating}
     ))
 }
 
-pub fn reply_event<M>(event: impl AsRef<MsgEvent>, msg: M)
+pub fn reply_event<M>(event: impl AsRef<MsgEvent>, msg: M) -> Option<()>
 where
     Message: From<M>,
     M: serde::Serialize,
@@ -108,4 +108,6 @@ where
     } else {
         event.reply(msg);
     }
+
+    None
 }
