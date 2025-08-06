@@ -1,4 +1,7 @@
-use std::sync::LazyLock;
+use std::{
+    path::PathBuf,
+    sync::{LazyLock, OnceLock},
+};
 
 use redb::{Database, ReadTransaction, ReadableTable as _, TableDefinition, WriteTransaction};
 use spdlog::{error, info};
@@ -6,11 +9,17 @@ use spdlog::{error, info};
 const ID_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");
 const ID_DIVINGFISH: TableDefinition<'_, i64, String> = TableDefinition::new("divingfish");
 
+pub static DATABASE_PATH: OnceLock<PathBuf> = OnceLock::new();
+
 static DATABASE: LazyLock<Database> = LazyLock::new(|| {
     info!("initializing database...");
-    let db = Database::create("userdata.db")
-        .inspect_err(|e| error!("failed initializing db: {e}"))
-        .unwrap();
+    let db = Database::create(
+        DATABASE_PATH
+            .get()
+            .expect("you must set `DATABASE_PATH` before initializing database"),
+    )
+    .inspect_err(|e| error!("failed initializing db: {e}"))
+    .unwrap();
     let write_txn = db.begin_write().unwrap();
     _ = write_txn.open_table(ID_USERID);
     db

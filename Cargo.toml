@@ -5,10 +5,8 @@ edition = "2024"
 
 [dependencies]
 kovi.workspace = true
-spdlog-rs.workspace = true
+spdlog-rs = { workspace = true, features = ["log"] }
 nyquest-preset.workspace = true
-
-kovi-plugin-cmd = "0.3.0"
 
 snafu = { workspace = true }
 
@@ -20,6 +18,11 @@ help-commands = { version = "0.1.0", path = "plugins/help-commands" }
 play-voice = { version = "0.1.0", path = "plugins/play-voice" }
 import-records = { version = "0.1.0", path = "plugins/import-records" }
 pcrt-plot = { version = "0.1.0", path = "plugins/pcrt-plot" }
+
+userdb = { workspace = true }
+argh = "0.1.13"
+crabtime = { git = "https://github.com/wdanilo/crabtime", version = "1.1.3" }
+toml = "0.9.5"
 
 [workspace]
 members = [
