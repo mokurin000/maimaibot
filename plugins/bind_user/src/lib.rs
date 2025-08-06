@@ -58,7 +58,7 @@ async fn start() {
                 }
             }
             &["/bindqr", qrcode_content] => {
-                if !qrcode_content.starts_with("SDWCMAID") || qrcode_content.len() < 64 {
+                if !qrcode_content.starts_with("SGWCMAID") || qrcode_content.len() < 64 {
                     reply_event(event, "无效二维码！请检查是否为扫描结果");
                     return None;
                 }
