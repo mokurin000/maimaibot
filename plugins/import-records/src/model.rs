@@ -71,7 +71,7 @@ impl TryFrom<UserMusicDetail> for DivingFishRecord {
             0 | _ => "",
         };
         let dx_score = deluxscore_max as u32;
-        let achievements = achievement as f64 / 1000.;
+        let achievements = achievement as f64 / 10000.;
 
         Ok(Self {
             title,
