@@ -44,18 +44,24 @@ async fn start() {
                 if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
                     reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
                 } else {
-                    if let Ok(preview) = user_preview(client, user_id).await {
+                    if user_id <= 20000000
+                        && let Ok(preview) = user_preview(client, user_id).await
+                    {
                         reply_event(
                             event,
                             Message::new()
                                 .add_text(format!("已成功绑定到 userId {user_id}\n\n{preview}")),
                         );
                     } else {
-                        reply_event(event, "无效的 userId ~");
+                        reply_event(event, "无效的 userId ~ 应为八位数字");
                     }
                 }
             }
             &["/bindqr", qrcode_content] => {
+                if !qrcode_content.starts_with("SDWCMAID") || qrcode_content.len() < 64 {
+                    reply_event(event, "无效二维码！请检查是否为扫描结果");
+                    return None;
+                }
                 match (QRCode { qrcode_content }).login(client).await {
                     Ok(user_id) => {
                         let user_id = user_id as u32;
