@@ -4,13 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "orjson>=3.11.1",
-    "playwright>=1.54.0",
-    "pyecharts>=2.0.8",
-]
+dependencies = []
 
 [project.optional-dependencies]
-silent-detect = [
-    "pydub>=0.25.1",
-]
+silent-detect = ["pydub>=0.25.1"]

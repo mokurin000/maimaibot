@@ -15,3 +15,5 @@
 __pycache__
 
 /browser_data
+
+/uv.lock
