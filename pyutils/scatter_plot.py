@@ -1,58 +1,20 @@
 import asyncio
 from sys import stdin
-from decimal import Decimal
-from functools import reduce
 from typing import Literal
 
-import polars as pl
+from sys import argv
 import orjson as json
 import pyecharts.options as opts
 from pyecharts.charts import Scatter
 
 
-from helpers import query_music_db, find_level, dx_rating
 from scnapshot_html import render
 
 
-def calculate_dxrating(music: dict):
-    music_id = music["musicId"]
-    level_id = music["level"]
-    ach = music["achievement"]
-    music_info = query_music_db(music_id)
-    if not music_info:
-        return music | {"dxRating": 0}
-    level = find_level(music_info, level_id)
-
-    try:
-        return music | {"dxRating": dx_rating(Decimal(level.pop()["difficulty"]), ach)}
-    except IndexError as _:
-        return music | {"dxRating": 0}
-
-
-data = json.loads(stdin.buffer.read())
-user_id = data["userId"]
-music_list: list[dict[str, dict]] = data["userMusicList"]
-musics = reduce(
-    lambda a, b: a + b, (music["userMusicDetailList"] for music in music_list)
-)
-
-musics = list(map(calculate_dxrating, musics))
-
-df = (
-    pl.LazyFrame(musics)
-    .filter(pl.col("dxRating") > 0)  # filter out invalid play
-    .select(["playCount", "dxRating"])
-    .sort("dxRating", descending=False)
-    .with_columns(pl.col("playCount").cum_sum())
-    .collect()
-)
-
-x_data = df["playCount"].to_list()
-y_data = df["dxRating"].to_list()
-
-
 def init_chart(
-    x_type: Literal["value", "log"],
+    x_data: list[int],
+    y_data: list[int],
+    graph_type: Literal["value", "log"],
     x_min: int = 1,
     x_max: int = 5000,
     y_max: int = 330,
@@ -82,7 +44,7 @@ chart_scatter.on('finished', () => {
             ),
             xaxis_opts=opts.AxisOpts(
                 name="总游玩曲目-次数",
-                type_=x_type,
+                type_=graph_type,
                 min_=x_min,
                 max_=x_max,
             ),
@@ -108,6 +70,12 @@ chart_scatter.on('finished', () => {
 
 
 async def main():
+    user_id = int(argv[1])
+
+    data = json.loads(stdin.buffer.read())
+    x_data = [d[0] for d in data]
+    y_data = [d[1] for d in data]
+
     x_max = (x_data[-1] // 50 * 50) + 50
     y_max = min(330, (y_data[-1] // 50 * 50) + 50)
 
@@ -118,6 +86,8 @@ async def main():
     if gtype == "log":
         x_max = (x_max // 100) or 10
     init_chart(
+        x_data,
+        y_data,
         gtype,
         x_min=1,
         x_max=x_max,

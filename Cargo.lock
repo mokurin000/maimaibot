@@ -1171,6 +1171,7 @@ version = "0.1.0"
 dependencies = [
  "common-utils",
  "kovi",
+ "music-db",
  "sdgb-api",
  "shared-client",
  "snafu",

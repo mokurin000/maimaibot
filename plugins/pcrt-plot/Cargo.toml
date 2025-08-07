@@ -12,3 +12,4 @@ snafu.workspace = true
 userdb.workspace = true
 shared-client.workspace = true
 common-utils.workspace = true
+music-db.workspace = true
