@@ -1,4 +1,7 @@
-use std::path::{PathBuf, absolute};
+use std::{
+    path::{PathBuf, absolute},
+    time::SystemTime,
+};
 
 use common_utils::reply_event;
 use kovi::{
@@ -10,7 +13,7 @@ use sdgb_api::title::{
     model::{GetUserMusicApiResp, UserMusicDetail},
 };
 use snafu::Report;
-use spdlog::error;
+use spdlog::{error, info};
 use userdb::query_user;
 
 use crate::plot::draw_webp;
@@ -73,9 +76,15 @@ async fn start() {
             return Report::ok();
         }
 
+        let start_time = SystemTime::now();
+
         let webp_img = spawn_blocking(|| draw_webp(pc_rating))
             .await
             .expect("join error");
+
+        if let Ok(time) = start_time.elapsed().map(|dur| dur.as_millis()) {
+            info!("pcrt: generated image in {time}ms");
+        }
 
         match webp_img {
             Ok(data) => {
