@@ -24,7 +24,7 @@ async def render(
         echarts.getInstanceByDom(
             document.querySelector("div[_echarts_instance_]")
         ).getDataURL({
-            type: 'jpeg',
+            type: 'png',
             pixelRatio: 1,
             excludeComponents: ['toolbox']
         }).split(',')[1]
