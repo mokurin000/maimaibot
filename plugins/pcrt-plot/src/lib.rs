@@ -59,8 +59,6 @@ async fn start() {
             return Report::ok();
         }
 
-        reply_event(&event, "少女祈祷中...");
-
         let resp = match get_user_all_music(client, user_id).await {
             Ok(r) => r,
             Err(e) => {
