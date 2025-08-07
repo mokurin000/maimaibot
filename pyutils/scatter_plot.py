@@ -62,8 +62,18 @@ def init_chart(
             init_opts=opts.InitOpts(
                 width="1600px",  # 设置图表宽度
                 height="1000px",  # 设置图表高度
+                chart_id="scatter",
+                animation_opts=opts.AnimationOpts(animation=False),
             )
         )
+        # creates a `div` element to easily wait for 'finished'
+        .add_js_funcs("""
+chart_scatter.on('finished', () => {
+    const elem = document.createElement("div");
+    elem.setAttribute("class", "echarts-finished");
+    document.querySelector('body').appendChild(elem);
+});
+""")
         .set_series_opts()
         .set_global_opts(
             title_opts=opts.TitleOpts(

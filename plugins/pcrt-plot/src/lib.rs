@@ -11,7 +11,7 @@ use snafu::Report;
 use spdlog::{error, info};
 use userdb::query_user;
 
-pub const CACHE_MINUTES: u64 = 60 * 24; // 1 day
+pub const CACHE_MINUTES: u64 = 60; // 1 hour
 
 #[kovi::plugin]
 async fn start() {

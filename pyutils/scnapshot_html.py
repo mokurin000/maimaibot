@@ -16,7 +16,7 @@ async def render(
         page = await browser.new_page(viewport={"width": 1600, "height": 1000})
         await page.goto(f"file://{abspath(html_path)}")
 
-        await asyncio.sleep(2.0)
+        await page.locator("div.echarts-finished").wait_for(state="attached")
 
         if transparent:
             png_base64 = await page.evaluate(
