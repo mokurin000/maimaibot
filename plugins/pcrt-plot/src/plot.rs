@@ -19,7 +19,11 @@ fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>, log_x: bool) -> Option<Chart>
     let pc_rating = pc_rating.as_ref();
     let x_max = pc_rating.last()?.0 / 50 * 50 + 50;
     let x_min = if log_x {
-        (x_max / 100 * 100).max(10)
+        let mut n = x_max;
+        while n > 10 {
+            n /= 10;
+        }
+        n
     } else {
         1
     };
