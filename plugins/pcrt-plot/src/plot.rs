@@ -6,15 +6,23 @@ use charming::{
     series::Scatter,
 };
 /// pc_rating must be non empty!
-pub fn draw_webp(pc_rating: impl AsRef<[(i32, i32)]>) -> Result<Vec<u8>, charming::EchartsError> {
-    let chart = make_chart(pc_rating).unwrap();
+pub fn draw_webp(
+    pc_rating: impl AsRef<[(i32, i32)]>,
+    log_x: bool,
+) -> Result<Vec<u8>, charming::EchartsError> {
+    let chart = make_chart(pc_rating, log_x).unwrap();
     let mut render = ImageRenderer::new(1600, 1000);
     render.render_format(ImageFormat::WebP, &chart)
 }
 
-fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>) -> Option<Chart> {
+fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>, log_x: bool) -> Option<Chart> {
     let pc_rating = pc_rating.as_ref();
     let x_max = pc_rating.last()?.0 / 50 * 50 + 50;
+    let x_min = if log_x {
+        (x_max / 100 * 100).max(10)
+    } else {
+        1
+    };
     let y_max = (pc_rating.last()?.1 / 50 * 50 + 50).min(330);
 
     let df: DataFrame = pc_rating
@@ -47,9 +55,13 @@ fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>) -> Option<Chart> {
             )
             .x_axis(
                 Axis::new()
-                    .type_(AxisType::Value)
+                    .type_(if log_x {
+                        AxisType::Log
+                    } else {
+                        AxisType::Value
+                    })
                     .name("总游玩曲目-次数")
-                    .min(1)
+                    .min(x_min)
                     .max(x_max),
             )
             .y_axis(

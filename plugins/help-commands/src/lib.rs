@@ -28,6 +28,8 @@ async fn main() {
 /playsound 伙伴id 语音id - 指定语音
 
 /pcrt - 绘制 PlayCount-Rating 曲线
+/pcrt linear - 线性X轴
+/pcrt log    - 对数X轴
 盒我 - 获取账户登录记录",
         );
     });

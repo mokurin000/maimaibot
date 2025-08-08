@@ -24,9 +24,16 @@ pub const CACHE_MINUTES: u64 = 60; // 1 hour
 async fn start() {
     let client = shared_client::nyquest_client().await;
     plugin::on_msg(async move |event| {
-        if event.borrow_text() != Some("/pcrt") {
-            return Report::ok();
-        }
+        let is_log_x = match event
+            .borrow_text()
+            .map(|t| t.split_whitespace().collect::<Vec<&str>>())
+            .as_deref()
+        {
+            Some(&["/pcrt"]) => false,
+            Some(&["/pcrt", "linear"]) => false,
+            Some(&["/pcrt", "log"]) => true,
+            _ => return Report::ok(),
+        };
 
         let sender_id = event.user_id;
         let user_id = match query_user(sender_id) {
@@ -42,7 +49,10 @@ async fn start() {
             Ok(Some(user_id)) => user_id,
         };
 
-        let rela_img_path = PathBuf::from(format!("plot_cache/{user_id}-linear.webp"));
+        let rela_img_path = PathBuf::from(format!(
+            "plot_cache/{user_id}-{}.webp",
+            if is_log_x { "log" } else { "linear" }
+        ));
         let Ok(image_path) = absolute(rela_img_path) else {
             error!("failed to make absolute image path!");
             return Report::ok();
@@ -76,7 +86,7 @@ async fn start() {
 
         let start_time = SystemTime::now();
 
-        let webp_img = spawn_blocking(|| draw_webp(pc_rating))
+        let webp_img = spawn_blocking(move || draw_webp(pc_rating, is_log_x))
             .await
             .expect("join error");
 
