@@ -47,6 +47,7 @@ async fn start() {
             error!("failed to make absolute image path!");
             return Report::ok();
         };
+        let send_path = format!("file://{}", image_path.to_string_lossy());
 
         // use cache
         if image_path.metadata().is_ok_and(|m| {
@@ -55,10 +56,7 @@ async fn start() {
                     .is_ok_and(|dur| dur.as_secs() < 60 * CACHE_MINUTES)
             })
         }) {
-            reply_event(
-                event,
-                Message::new().add_image(&image_path.to_string_lossy()),
-            );
+            reply_event(event, Message::new().add_image(&send_path));
             return Report::ok();
         }
 
@@ -89,10 +87,7 @@ async fn start() {
         match webp_img {
             Ok(data) => {
                 _ = fs::write(&image_path, data).await;
-                reply_event(
-                    event,
-                    Message::new().add_image(&image_path.to_string_lossy()),
-                );
+                reply_event(event, Message::new().add_image(&send_path));
             }
             Err(e) => {
                 error!("img gen error: {e}");
