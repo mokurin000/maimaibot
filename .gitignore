@@ -1,7 +1,7 @@
 /target
 
 /kovi.*.toml
-/userdata.db
+/*.db
 
 /voices/Voice_*
 /voices/Voice_Partner*

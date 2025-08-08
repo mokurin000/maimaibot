@@ -50,7 +50,7 @@ fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>) -> Option<Chart> {
                     .type_(AxisType::Value)
                     .name("总游玩曲目-次数")
                     .min(1)
-                    .max(x_max), // .data(pc.iter().map(ToString::to_string).collect()),
+                    .max(x_max),
             )
             .y_axis(
                 Axis::new()

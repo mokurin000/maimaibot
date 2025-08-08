@@ -14,6 +14,7 @@ fn spawn_bot(plugins: Vec<String>) {
             &std::fs::read_to_string(
                 CONFIG_PATH.get().expect("config were not set!")
             )?)?;
+        spdlog::info!("loaded config: {config:?}");
         kovi::bot::Bot::build(&config)
     };);
 
@@ -39,7 +40,7 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
 
     nyquest_preset::register();
     spdlog::init_log_crate_proxy()?;
-    kovi::log::set_max_level(LevelFilter::Warn);
+    kovi::log::set_max_level(LevelFilter::Info);
 
     _ = userdb::DATABASE_PATH.set(database_path);
     _ = CONFIG_PATH.set(config_path);

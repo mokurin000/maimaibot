@@ -22,6 +22,8 @@ static DATABASE: LazyLock<Database> = LazyLock::new(|| {
     .unwrap();
     let write_txn = db.begin_write().unwrap();
     _ = write_txn.open_table(ID_USERID);
+    _ = write_txn.open_table(ID_DIVINGFISH);
+    _ = write_txn.commit();
     db
 });
 
