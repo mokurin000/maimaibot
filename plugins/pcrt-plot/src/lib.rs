@@ -21,14 +21,14 @@ pub const CACHE_MINUTES: u64 = 60; // 1 hour
 async fn start() {
     let client = shared_client::nyquest_client().await;
     plugin::on_msg(async move |event| {
-        let _is_log_x = match event
+        let is_log_x = match event
             .borrow_text()
             .map(|t| t.split_whitespace().collect::<Vec<&str>>())
             .as_deref()
         {
             Some(&["/pcrt"]) => false,
             Some(&["/pcrt", "linear"]) => false,
-            // Some(&["/pcrt", "log"]) => true,
+            Some(&["/pcrt", "log"]) => true,
             _ => return Report::ok(),
         };
 
@@ -46,7 +46,10 @@ async fn start() {
             Ok(Some(user_id)) => user_id,
         };
 
-        let rela_img_path = PathBuf::from(format!("plot_cache/{user_id}-linear.png",));
+        let rela_img_path = PathBuf::from(format!(
+            "plot_cache/{user_id}-{}.png",
+            if is_log_x { "log" } else { "linear" }
+        ));
         let Ok(image_path) = absolute(rela_img_path) else {
             error!("failed to make absolute image path!");
             return Report::ok();
@@ -82,9 +85,18 @@ async fn start() {
 
         let draw_result = spawn_blocking(move || {
             let (x, y) = pc_rating.last().cloned().unwrap_or_default();
+            let x_min = if is_log_x {
+                let mut n = x;
+                while n > 10 {
+                    n /= 10;
+                }
+                n
+            } else {
+                1
+            };
             let x_max = (49 + x) / 50 * 50;
-            let y_max = ((49 + y) / 50 * 50).min(330);
-            draw_chart(image_path, pc_rating, 1, x_max, y_max)
+            let y_max = ((9 + y) / 10 * 10).min(330);
+            draw_chart(image_path, pc_rating, x_min, x_max, y_max, is_log_x)
         })
         .await
         .expect("join error");

@@ -1047,6 +1047,7 @@ dependencies = [
 [[package]]
 name = "kovi"
 version = "0.12.4"
+source = "git+https://github.com/ThriceCola/Kovi?branch=nightly#29def088279b194dc137d63475bede18d6d5b99d"
 dependencies = [
  "ahash",
  "chrono",
