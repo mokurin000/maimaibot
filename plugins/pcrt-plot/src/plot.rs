@@ -1,86 +1,71 @@
-use charming::{
-    Chart, ImageFormat, ImageRenderer,
-    component::{Axis, Title, VisualMap, VisualMapChannel, VisualMapType},
-    datatype::{CompositeValue, DataFrame, DataPoint},
-    element::{AxisTick, AxisType, Color, SplitLine},
-    series::Scatter,
-};
-/// pc_rating must be non empty!
-pub fn draw_webp(
-    pc_rating: impl AsRef<[(i32, i32)]>,
-    log_x: bool,
-) -> Result<Vec<u8>, charming::EchartsError> {
-    let chart = make_chart(pc_rating, log_x).unwrap();
-    let mut render = ImageRenderer::new(1600, 1000);
-    render.render_format(ImageFormat::WebP, &chart)
+use std::error::Error;
+
+use glam::U8Vec3;
+use plotters::{prelude::*, style::full_palette::LIGHTBLUE};
+
+fn colormap(rating: i32) -> RGBColor {
+    // from zrender fastlerp
+    let colors = [
+        // "rgba(80, 163, 186, 1)",
+        U8Vec3::new(0x50, 0xa3, 0xba).as_dvec3(),
+        // "rgba(234, 199, 99, 1)",
+        U8Vec3::new(0xea, 0xc7, 0x63).as_dvec3(),
+        // "rgba(217, 78, 93, 1)",
+        U8Vec3::new(0xd9, 0x4e, 0x5d).as_dvec3(),
+    ];
+
+    let t = (rating.abs() as f64 / 330.0) * (colors.len() - 1) as f64; // normalization
+    let base_color = colors[t.floor() as usize];
+    let bonus_color = colors[t.ceil() as usize];
+    let bonus = t - t.floor();
+    let U8Vec3 { x, y, z } = (base_color + bonus * (bonus_color - base_color)).as_u8vec3();
+
+    RGBColor(x, y, z)
 }
 
-fn make_chart(pc_rating: impl AsRef<[(i32, i32)]>, log_x: bool) -> Option<Chart> {
-    let pc_rating = pc_rating.as_ref();
-    let x_max = pc_rating.last()?.0 / 50 * 50 + 50;
-    let x_min = if log_x {
-        let mut n = x_max;
-        while n > 10 {
-            n /= 10;
-        }
-        n
-    } else {
-        1
-    };
-    let y_max = (pc_rating.last()?.1 / 50 * 50 + 50).min(330);
+pub fn draw_chart(
+    image_path: impl AsRef<std::path::Path>,
+    xy_data: impl IntoIterator<Item = (i32, i32)>,
+    x_min: i32,
+    x_max: i32,
+    y_max: i32,
+) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let root = BitMapBackend::new(image_path.as_ref(), (1600, 1000)).into_drawing_area();
+    root.fill(&WHITE)?;
 
-    let df: DataFrame = pc_rating
-        .into_iter()
-        .cloned()
-        .map(|(x, y)| DataPoint::Value(CompositeValue::Array(vec![x.into(), y.into()])))
-        .collect();
+    let x_range = x_min..x_max;
+    let y_range = 50..y_max;
 
-    Some(
-        Chart::new()
-            .background_color("#FFFFFF")
-            .animation(false)
-            .color(
-                [
-                    "#5470c6", "#91cc75", "#fac858", "#ee6666", "#73c0de", "#3ba272", "#fc8452",
-                    "#9a60b4", "#ea7ccc",
-                ]
-                .map(Color::from)
-                .to_vec(),
-            )
-            .visual_map(
-                VisualMap::new()
-                    .min(0)
-                    .max(330)
-                    .in_range(
-                        VisualMapChannel::new()
-                            .color(["#50a3ba", "#eac763", "#d94e5d"].map(Color::from).to_vec()),
-                    )
-                    .type_(VisualMapType::Continuous),
-            )
-            .x_axis(
-                Axis::new()
-                    .type_(if log_x {
-                        AxisType::Log
-                    } else {
-                        AxisType::Value
-                    })
-                    .name("总游玩曲目-次数")
-                    .min(x_min)
-                    .max(x_max),
-            )
-            .y_axis(
-                Axis::new()
-                    .type_(AxisType::Value)
-                    .axis_tick(AxisTick::new().show(true))
-                    .split_line(SplitLine::new().show(true))
-                    .min(50)
-                    .max(y_max),
-            )
-            .series(Scatter::new().symbol_size(5).data(df))
-            .title(
-                Title::new()
-                    .text("pc v.s. rating")
-                    .subtext("只计入最高A以上rank的曲目，按游玩track总数"),
-            ),
-    )
+    let mut chart = ChartBuilder::on(&root)
+        .margin(40)
+        .x_label_area_size(80)
+        .y_label_area_size(75)
+        .build_cartesian_2d(x_range, y_range)?;
+
+    let label_font = ("sans-serif", 23, &LIGHTBLUE).into_text_style(&root);
+    chart
+        .configure_mesh()
+        .x_labels(((x_max + 49) / 50) as _)
+        .y_labels(((y_max + 9) / 10) as _)
+        .x_label_style(label_font.clone())
+        .y_label_style(label_font.clone())
+        .draw()?;
+
+    // draw points
+    chart.draw_series(xy_data.into_iter().map(|(x, y)| {
+        Circle::new((x, y), 2.5, colormap(y).filled()) // 点大小为 5
+    }))?;
+
+    // add title
+    let text_style = ("sans-serif", 40, &BLACK).into_text_style(&root);
+    root.draw_text(
+        "Total Track/Difficulty Play - Single Track DX Rating",
+        &text_style,
+        (450, 940),
+    )?;
+
+    // render whole chart
+    root.present()?;
+
+    Ok(())
 }

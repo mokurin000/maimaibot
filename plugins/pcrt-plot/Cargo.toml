@@ -13,4 +13,5 @@ userdb.workspace = true
 shared-client.workspace = true
 common-utils.workspace = true
 music-db.workspace = true
-charming = { version = "0.6.0", default-features = false, features = ["ssr-raster"] }
+glam = "0.30.5"
+plotters = "0.3.7"

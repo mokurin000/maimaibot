@@ -4,10 +4,7 @@ use std::{
 };
 
 use common_utils::reply_event;
-use kovi::{
-    Message, PluginBuilder as plugin,
-    tokio::{fs, task::spawn_blocking},
-};
+use kovi::{Message, PluginBuilder as plugin, tokio::task::spawn_blocking};
 use sdgb_api::title::{
     helper::get_user_all_music,
     model::{GetUserMusicApiResp, UserMusicDetail},
@@ -16,7 +13,7 @@ use snafu::Report;
 use spdlog::{error, info};
 use userdb::query_user;
 
-use crate::plot::draw_webp;
+use crate::plot::draw_chart;
 
 pub const CACHE_MINUTES: u64 = 60; // 1 hour
 
@@ -24,14 +21,14 @@ pub const CACHE_MINUTES: u64 = 60; // 1 hour
 async fn start() {
     let client = shared_client::nyquest_client().await;
     plugin::on_msg(async move |event| {
-        let is_log_x = match event
+        let _is_log_x = match event
             .borrow_text()
             .map(|t| t.split_whitespace().collect::<Vec<&str>>())
             .as_deref()
         {
             Some(&["/pcrt"]) => false,
             Some(&["/pcrt", "linear"]) => false,
-            Some(&["/pcrt", "log"]) => true,
+            // Some(&["/pcrt", "log"]) => true,
             _ => return Report::ok(),
         };
 
@@ -49,10 +46,7 @@ async fn start() {
             Ok(Some(user_id)) => user_id,
         };
 
-        let rela_img_path = PathBuf::from(format!(
-            "plot_cache/{user_id}-{}.webp",
-            if is_log_x { "log" } else { "linear" }
-        ));
+        let rela_img_path = PathBuf::from(format!("plot_cache/{user_id}-linear.png",));
         let Ok(image_path) = absolute(rela_img_path) else {
             error!("failed to make absolute image path!");
             return Report::ok();
@@ -86,17 +80,20 @@ async fn start() {
 
         let start_time = SystemTime::now();
 
-        let webp_img = spawn_blocking(move || draw_webp(pc_rating, is_log_x))
-            .await
-            .expect("join error");
+        let draw_result = spawn_blocking(move || {
+            let x_max = pc_rating.last().cloned().unwrap_or_default().0 / 50 * 50 + 50;
+            let y_max = (pc_rating.last().cloned().unwrap_or_default().0 / 50 * 50 + 50).min(330);
+            draw_chart(image_path, pc_rating, 1, x_max, y_max)
+        })
+        .await
+        .expect("join error");
 
         if let Ok(time) = start_time.elapsed().map(|dur| dur.as_millis()) {
             info!("pcrt: generated image in {time}ms");
         }
 
-        match webp_img {
-            Ok(data) => {
-                _ = fs::write(&image_path, data).await;
+        match draw_result {
+            Ok(_) => {
                 reply_event(event, Message::new().add_image(&send_path));
             }
             Err(e) => {
