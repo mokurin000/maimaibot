@@ -81,8 +81,9 @@ async fn start() {
         let start_time = SystemTime::now();
 
         let draw_result = spawn_blocking(move || {
-            let x_max = pc_rating.last().cloned().unwrap_or_default().0 / 50 * 50 + 50;
-            let y_max = (pc_rating.last().cloned().unwrap_or_default().0 / 50 * 50 + 50).min(330);
+            let (x, y) = pc_rating.last().cloned().unwrap_or_default();
+            let x_max = (49 + x) / 50 * 50;
+            let y_max = ((49 + y) / 50 * 50).min(330);
             draw_chart(image_path, pc_rating, 1, x_max, y_max)
         })
         .await
