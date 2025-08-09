@@ -84,9 +84,9 @@ async fn start() {
         let start_time = SystemTime::now();
 
         let draw_result = spawn_blocking(move || {
-            let (x, y) = pc_rating.last().cloned().unwrap_or_default();
+            let (last_x, last_y) = pc_rating.last().cloned().unwrap_or_default();
             let x_min = if is_log_x {
-                let mut n = x;
+                let mut n = last_x;
                 while n > 10 {
                     n /= 10;
                 }
@@ -94,9 +94,15 @@ async fn start() {
             } else {
                 1
             };
-            let x_max = (49 + x) / 50 * 50;
-            let y_max = ((9 + y) / 10 * 10).min(330);
-            draw_chart(image_path, pc_rating, x_min, x_max, y_max, is_log_x)
+            let x_max = (49 + last_x) / 50 * 50;
+            let y_max = ((9 + last_y) / 10 * 10).min(330);
+            draw_chart(
+                image_path, // image output path
+                pc_rating,  // all data
+                x_min, x_max, y_max,  // coordinates
+                last_x, // total track play count
+                is_log_x,
+            )
         })
         .await
         .expect("join error");

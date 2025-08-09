@@ -29,6 +29,7 @@ pub fn draw_chart(
     x_min: i32,
     x_max: i32,
     y_max: i32,
+    last_x: i32,
     is_log_x: bool,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     let root = BitMapBackend::new(image_path.as_ref(), (1600, 1000)).into_drawing_area();
@@ -43,16 +44,17 @@ pub fn draw_chart(
         .x_label_area_size(80)
         .y_label_area_size(75);
 
-    let label_font = ("sans-serif", 23, &LIGHTBLUE).into_text_style(&root);
-    let text_style = ("sans-serif", 40, &BLACK).into_text_style(&root);
+    let label_style = ("sans-serif", 23, &LIGHTBLUE).into_text_style(&root);
+    let desc_style = ("sans-serif", 30, &BLACK).into_text_style(&root);
+    let title_style = ("sans-serif", 40, &BLACK).into_text_style(&root);
 
     if is_log_x {
         let mut chart = chart.build_cartesian_2d(x_range.log_scale(), y_range)?;
         chart
             .configure_mesh()
             .y_labels(((y_max + 9) / 10) as _)
-            .x_label_style(label_font.clone())
-            .y_label_style(label_font.clone())
+            .x_label_style(label_style.clone())
+            .y_label_style(label_style.clone())
             .draw()?;
         // draw points
         chart.draw_series(xy_data.into_iter().map(|(x, y)| {
@@ -63,8 +65,8 @@ pub fn draw_chart(
         chart
             .configure_mesh()
             .y_labels(((y_max + 9) / 10) as _)
-            .x_label_style(label_font.clone())
-            .y_label_style(label_font.clone())
+            .x_label_style(label_style.clone())
+            .y_label_style(label_style.clone())
             .draw()?;
         // draw points
         chart.draw_series(xy_data.into_iter().map(|(x, y)| {
@@ -72,10 +74,12 @@ pub fn draw_chart(
         }))?;
     };
 
+    // add desc
+    root.draw_text(&format!("Total play: {last_x}"), &desc_style, (100, 950))?;
     // add title
     root.draw_text(
         "Total Track/Difficulty Play - Single Track DX Rating",
-        &text_style,
+        &title_style,
         (450, 940),
     )?;
 
