@@ -45,7 +45,6 @@ pub fn draw_chart(
     let label_font = ("sans-serif", 23, &LIGHTBLUE).into_text_style(&root);
     chart
         .configure_mesh()
-        .x_labels(((x_max + 49) / 50) as _)
         .y_labels(((y_max + 9) / 10) as _)
         .x_label_style(label_font.clone())
         .y_label_style(label_font.clone())
