@@ -55,7 +55,7 @@ where
     X: AsRangedCoord<Value = i32, CoordDescType = R>,
     R: Ranged<FormatOption = DefaultFormatting, ValueType = i32>,
 {
-    let root = BitMapBackend::new(image_path.as_ref(), (1600, 1000)).into_drawing_area();
+    let root = BitMapBackend::new(&image_path, (1600, 1000)).into_drawing_area();
     root.fill(&WHITE)?;
 
     let y_range = 50..y_max;
