@@ -41,20 +41,18 @@ async fn start() {
                 reply_event(event, "/bindqr SGWCMAID... (上机二维码解码内容)");
             }
             &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
+                if user_id >= 20000000 || user_id < 10000000 {
+                    reply_event(event, "无效的 userId ~ 应为八位数字");
+                    return None;
+                }
                 if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
                     reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
-                } else {
-                    if user_id <= 20000000
-                        && let Ok(preview) = user_preview(client, user_id).await
-                    {
-                        reply_event(
-                            event,
-                            Message::new()
-                                .add_text(format!("已成功绑定到 userId {user_id}\n\n{preview}")),
-                        );
-                    } else {
-                        reply_event(event, "无效的 userId ~ 应为八位数字");
-                    }
+                } else if let Ok(preview) = user_preview(client, user_id).await {
+                    reply_event(
+                        event,
+                        Message::new()
+                            .add_text(format!("已成功绑定到 userId {user_id}\n\n{preview}")),
+                    );
                 }
             }
             &["/bindqr", qrcode_content] => {
