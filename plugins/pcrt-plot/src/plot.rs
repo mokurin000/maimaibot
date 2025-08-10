@@ -36,10 +36,10 @@ pub fn draw_chart(
     is_log_x: bool,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     if is_log_x {
-        let x_spec = x_min..x_max;
+        let x_spec = (x_min..x_max).log_scale();
         draw_chart_impl(image_path, xy_data, x_spec, y_max, last_x)
     } else {
-        let x_spec = (x_min..x_max).log_scale();
+        let x_spec = x_min..x_max;
         draw_chart_impl(image_path, xy_data, x_spec, y_max, last_x)
     }
 }
