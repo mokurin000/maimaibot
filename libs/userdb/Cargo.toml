@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-redb = "2.6.2"
+redb = "3.0.0"
 spdlog-rs = { workspace = true }
 tokio = { workspace = true }

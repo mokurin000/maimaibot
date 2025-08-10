@@ -3,7 +3,7 @@ use std::{
     sync::{LazyLock, OnceLock},
 };
 
-use redb::{Database, ReadTransaction, ReadableTable as _, TableDefinition, WriteTransaction};
+use redb::{Database, ReadTransaction, ReadableDatabase as _, ReadableTable as _, TableDefinition, WriteTransaction};
 use spdlog::{error, info};
 
 const ID_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");

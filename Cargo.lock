@@ -264,9 +264,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.31"
+version = "1.2.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3a42d84bb6b69d3a8b3eaacf0d88f179e1929695e1ad012b6cf64d9caaa5fd2"
+checksum = "2352e5597e9c544d5e6d9c95190d5d27738ade584fa8db0a16e130e5c2b5296e"
 dependencies = [
  "shlex",
 ]
@@ -408,33 +408,13 @@ name = "crabtime"
 version = "1.1.3"
 source = "git+https://github.com/wdanilo/crabtime.git?rev=2ed856f5#2ed856f5f8b85a1e81598d64a36305a1d3f17d01"
 dependencies = [
- "crabtime-internal 1.1.3 (git+https://github.com/wdanilo/crabtime.git?rev=2ed856f5)",
-]
-
-[[package]]
-name = "crabtime"
-version = "1.1.3"
-source = "git+https://github.com/wdanilo/crabtime#2ed856f5f8b85a1e81598d64a36305a1d3f17d01"
-dependencies = [
- "crabtime-internal 1.1.3 (git+https://github.com/wdanilo/crabtime)",
+ "crabtime-internal",
 ]
 
 [[package]]
 name = "crabtime-internal"
 version = "1.1.3"
 source = "git+https://github.com/wdanilo/crabtime.git?rev=2ed856f5#2ed856f5f8b85a1e81598d64a36305a1d3f17d01"
-dependencies = [
- "proc-macro2",
- "quote",
- "rustc_version",
- "syn 2.0.104",
- "toml 0.8.23",
-]
-
-[[package]]
-name = "crabtime-internal"
-version = "1.1.3"
-source = "git+https://github.com/wdanilo/crabtime#2ed856f5f8b85a1e81598d64a36305a1d3f17d01"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1150,7 +1130,6 @@ version = "0.1.0"
 dependencies = [
  "argh",
  "bind_user",
- "crabtime 1.1.3 (git+https://github.com/wdanilo/crabtime)",
  "help-commands",
  "import-records",
  "kovi",
@@ -1208,7 +1187,7 @@ dependencies = [
 [[package]]
 name = "music-db"
 version = "0.1.0"
-source = "git+https://github.com/mokurin000/sdgb-utils-rs.git#adba34cde638d2afcf619b1fe509d84ceefcdd82"
+source = "git+https://github.com/mokurin000/sdgb-utils-rs.git#c8c101f72ada4dfe6045f72f0705a093c688167f"
 dependencies = [
  "rust_decimal",
  "rustc-hash",
@@ -1638,9 +1617,9 @@ dependencies = [
 
 [[package]]
 name = "redb"
-version = "2.6.2"
+version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59b38b05028f398f08bea4691640503ec25fcb60b82fb61ce1f8fd1f4fccd3f7"
+checksum = "225e8bf881033e020ed87e9f10fc6254cf3ebab8d440e6fbb4c7b34bec2a0543"
 dependencies = [
  "libc",
 ]
@@ -1730,9 +1709,9 @@ dependencies = [
 
 [[package]]
 name = "rustversion"
-version = "1.0.21"
+version = "1.0.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a0d197bd2c9dc6e53b84da9556a69ba4cdfab8619eb41a8bd1cc2027a0f6b1d"
+checksum = "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d"
 
 [[package]]
 name = "ryu"
@@ -1767,13 +1746,13 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 [[package]]
 name = "sdgb-api"
 version = "0.1.0"
-source = "git+https://github.com/mokurin000/sdgb-utils-rs.git#adba34cde638d2afcf619b1fe509d84ceefcdd82"
+source = "git+https://github.com/mokurin000/sdgb-utils-rs.git#c8c101f72ada4dfe6045f72f0705a093c688167f"
 dependencies = [
  "aes",
  "cbc",
  "chrono",
  "cipher",
- "crabtime 1.1.3 (git+https://github.com/wdanilo/crabtime.git?rev=2ed856f5)",
+ "crabtime",
  "digest",
  "flate2",
  "hmac-sha256",
@@ -1892,9 +1871,9 @@ checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
 
 [[package]]
 name = "slab"
-version = "0.4.10"
+version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04dc19736151f35336d325007ac991178d504a119863a2fcb3758cdb5e52c50d"
+checksum = "7a2ae44ef20feb57a68b23d846850f861394c2e02dc425a50098ae8c90267589"
 
 [[package]]
 name = "smallvec"
