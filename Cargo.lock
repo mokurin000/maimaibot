@@ -1158,6 +1158,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a282da65faaf38286cf3be983213fcf1d2e2a58700e808f83f4ea9a4804bc0"
 
 [[package]]
+name = "migrate-db"
+version = "0.1.0"
+dependencies = [
+ "redb 2.6.2",
+]
+
+[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1620,6 +1627,15 @@ name = "redb"
 version = "2.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59b38b05028f398f08bea4691640503ec25fcb60b82fb61ce1f8fd1f4fccd3f7"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "redb"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "225e8bf881033e020ed87e9f10fc6254cf3ebab8d440e6fbb4c7b34bec2a0543"
 dependencies = [
  "libc",
 ]
@@ -2301,7 +2317,7 @@ dependencies = [
 name = "userdb"
 version = "0.1.0"
 dependencies = [
- "redb",
+ "redb 3.0.0",
  "spdlog-rs",
  "tokio",
 ]

@@ -36,7 +36,10 @@ members = [
     "plugins/play-voice",
     "plugins/import-records",
     "plugins/pcrt-plot",
+    "migrate-db",
+    ".",
 ]
+default-members = [".", "migrate-db"]
 
 [workspace.dependencies]
 tokio = { version = "1", features = ["sync"] }

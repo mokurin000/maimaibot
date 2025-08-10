@@ -3,7 +3,10 @@ use std::{
     sync::{LazyLock, OnceLock},
 };
 
-use redb::{Database, ReadTransaction, ReadableTable as _, TableDefinition, WriteTransaction};
+use redb::{
+    Database, ReadTransaction, ReadableDatabase as _, ReadableTable as _, TableDefinition,
+    WriteTransaction,
+};
 use spdlog::{error, info};
 
 const ID_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");
@@ -20,7 +23,6 @@ static DATABASE: LazyLock<Database> = LazyLock::new(|| {
     )
     .inspect_err(|e| error!("failed initializing db: {e}"))
     .unwrap();
-    _ = db.upgrade();
     _ = db.compact();
     let write_txn = db.begin_write().unwrap();
     _ = write_txn.open_table(ID_USERID);
