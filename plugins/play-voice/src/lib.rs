@@ -3,7 +3,10 @@
 use std::{
     fs::read_dir,
     path::{Path, PathBuf, absolute},
-    sync::{Arc, LazyLock},
+    sync::{
+        Arc, LazyLock,
+        atomic::{AtomicBool, Ordering},
+    },
 };
 
 use common_utils::reply_event;
@@ -14,14 +17,28 @@ use crate::model::{VoiceData, VoiceMessage};
 
 mod model;
 
+static IS_TELEGRAM: AtomicBool = AtomicBool::new(false);
+
 #[kovi::plugin]
 async fn main() {
     info!("found {} voice files", VOICE_FILES.len());
+
+    let is_telegram = plugin::get_runtime_bot()
+        .get_version_info()
+        .await
+        .is_ok_and(|api| {
+            api.data
+                .pointer("/app_name")
+                .and_then(|app| app.as_str())
+                .is_some_and(|name| name == "Tele-KiraLink")
+        });
+    IS_TELEGRAM.store(is_telegram, Ordering::Release);
+
     plugin::on_msg(handle_msg);
 }
 
 async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
-    let sound_path = match event
+    let mut sound_path = match event
         .borrow_text()?
         .split_whitespace()
         .collect::<Vec<&str>>()
@@ -43,6 +60,10 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
         }
         _ => return None,
     };
+
+    if IS_TELEGRAM.load(Ordering::Acquire) {
+        sound_path = sound_path.to_string_lossy().replace(".silk", ".ogg").into();
+    }
 
     info!("selected: {}", sound_path.to_string_lossy());
 
