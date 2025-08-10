@@ -49,9 +49,17 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
     if !sound_path.exists() {
         reply_event(
             event,
-            "语音文件未找到! 😟
-伙伴id: 1/11~33, 语音id: 1~118, 系统音id: 1~74,76~159
+            Message::new()
+                .add_text(
+                    "语音文件未找到! 😟
+系统音id: 1~74,76~159 语音id: 1~118,
 部分伙伴没有全部语音",
+                )
+                .add_image(
+                    &absolute("./voices/partners.png")
+                        .unwrap_or_default()
+                        .to_string_lossy(),
+                ),
         );
         return None;
     }
