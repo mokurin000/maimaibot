@@ -144,9 +144,9 @@ fn acc_pc_rating(resp: &GetUserMusicApiResp) -> Vec<(i32, i32)> {
                  play_count,
                  ..
              }| {
-                let dx_rating = music_db::query_music_level(music_id, level)
-                    .map(|level| level.dx_rating(achievement as _));
-                dx_rating.map(|rating| (play_count, rating))
+                music_db::query_music_level(music_id, level)
+                    .map(|level| level.dx_rating(achievement as _).1)
+                    .map(|rating| (play_count, rating))
             },
         )
         .filter(|&(_, rating)| rating > 0)
