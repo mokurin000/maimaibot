@@ -66,7 +66,14 @@ async fn handle_message(event: Arc<MsgEvent>, bot: Arc<RuntimeBot>, main_admin_i
             .unwrap()
             .into(),
         1450..1700 => {
-            let img = fastrand::choice(["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrZI8ChUpddOrTjnar97g2oInb9piv6HaDoQ&s", "https://imgs.qiubiaoqing.com/qiubiaoqing/imgs/608cd26dde689ZqC.gif"]).unwrap();
+            let img = fastrand::choice([
+                // 还是会被拒绝
+                "https://imgs.qiubiaoqing.com/qiubiaoqing/imgs/608cd26dde689ZqC.gif",
+                // 我什么都会做的
+                "https://www.gamersky.com/showimage/id_gamersky.shtml?https://img1.gamersky.com/image2025/04/20250409_hzf_653_1/12288.jpg",
+                // 吻拳
+                "https://i.postimg.cc/Qx45ZpY5/mpv-shot0001.jpg",
+            ]).unwrap();
             Message::new().add_image(img)
         }
         1700..2200 => "男娘加我，我鼓包了".into(),
