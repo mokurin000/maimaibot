@@ -47,6 +47,7 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
         ping::__kovi_build_plugin,
         play_voice::__kovi_build_plugin,
         user_region::__kovi_build_plugin,
+        qixi_gacha::__kovi_build_plugin,
     ] {
         let plugin = plugin_cotr();
         info!("Mounting: {}", plugin.name);
