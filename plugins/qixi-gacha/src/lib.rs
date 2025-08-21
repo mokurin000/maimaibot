@@ -1,3 +1,5 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use common_utils::reply_event;
 use kovi::{Message, PluginBuilder as plugin};
 
@@ -8,7 +10,13 @@ async fn main() {
             return;
         }
 
-        let randnum = fastrand::u32(0..=9999);
+        let randnum = fastrand::Rng::with_seed(
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_nanos() as _,
+        )
+        .u32(0..=9999);
         let reply: Message = match randnum {
             0 => "好呀宝宝".into(),
             1..=100 => "啊啊啊啊宝宝你是一个\n叛徒特务大军阀反党分子野心家修正主义大恶霸".into(),
