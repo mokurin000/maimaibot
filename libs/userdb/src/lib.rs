@@ -1,6 +1,7 @@
 use std::{
     path::PathBuf,
     sync::{LazyLock, OnceLock},
+    time::{SystemTime, UNIX_EPOCH},
 };
 
 use redb::{
@@ -11,6 +12,38 @@ use spdlog::{error, info};
 
 const ID_USERID: TableDefinition<'_, i64, u32> = TableDefinition::new("userid");
 const ID_DIVINGFISH: TableDefinition<'_, i64, String> = TableDefinition::new("divingfish");
+
+// id -> unix timestamp
+const ID_QIXI_BAN_TIME: TableDefinition<'_, i64, u64> = TableDefinition::new("qixi_ban");
+
+pub fn qixi_ban_user(sender_id: i64) -> Result<(), redb::Error> {
+    let Ok(time) = SystemTime::now().duration_since(UNIX_EPOCH) else {
+        return Ok(());
+    };
+    let unix_ts = time.as_secs();
+    let txn = write_txn()?;
+    {
+        let mut table = txn.open_table(ID_QIXI_BAN_TIME)?;
+        table.insert(sender_id, unix_ts)?;
+    }
+    Ok(txn.commit()?)
+}
+
+pub fn qixi_user_banned(sender_id: i64) -> Result<bool, redb::Error> {
+    let Ok(time) = SystemTime::now().duration_since(UNIX_EPOCH) else {
+        return Ok(false);
+    };
+    let unix_ts = time.as_secs();
+
+    let txn = read_txn()?;
+    let table = txn.open_table(ID_QIXI_BAN_TIME)?;
+    let Some(banned) = table.get(sender_id)? else {
+        return Ok(false);
+    };
+
+    // ban an hour
+    Ok((unix_ts - banned.value()) < 3600)
+}
 
 pub static DATABASE_PATH: OnceLock<PathBuf> = OnceLock::new();
 
@@ -27,6 +60,7 @@ static DATABASE: LazyLock<Database> = LazyLock::new(|| {
     let write_txn = db.begin_write().unwrap();
     _ = write_txn.open_table(ID_USERID);
     _ = write_txn.open_table(ID_DIVINGFISH);
+    _ = write_txn.open_table(ID_QIXI_BAN_TIME);
     _ = write_txn.commit();
     db
 });
@@ -41,17 +75,13 @@ pub fn read_txn() -> Result<ReadTransaction, redb::Error> {
 
 pub fn query_user(id: i64) -> Result<Option<u32>, redb::Error> {
     let txn = read_txn()?;
-    {
-        let table = txn.open_table(ID_USERID)?;
-        Ok(table.get(id)?.map(|v| v.value()))
-    }
+    let table = txn.open_table(ID_USERID)?;
+    Ok(table.get(id)?.map(|v| v.value()))
 }
 pub fn query_user_df(id: i64) -> Result<Option<String>, redb::Error> {
     let txn = read_txn()?;
-    {
-        let table = txn.open_table(ID_DIVINGFISH)?;
-        Ok(table.get(id)?.map(|v| v.value()))
-    }
+    let table = txn.open_table(ID_DIVINGFISH)?;
+    Ok(table.get(id)?.map(|v| v.value()))
 }
 
 pub fn unbind_user(id: i64) -> Result<bool, redb::Error> {

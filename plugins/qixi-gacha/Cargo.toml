@@ -8,3 +8,4 @@ kovi.workspace = true
 fastrand.workspace = true
 
 common-utils.workspace = true
+userdb.workspace = true
