@@ -7,7 +7,6 @@ use userdb::{query_user, query_user_df};
 
 use crate::model::DivingFishRecord;
 
-/// TODO: DivingFish api impl
 #[kovi::plugin]
 async fn start() {
     plugin::on_msg(async move |event| {
