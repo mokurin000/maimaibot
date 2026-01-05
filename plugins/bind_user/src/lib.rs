@@ -34,13 +34,15 @@ async fn start() {
                     },
                 ),
             },
-            &["/binduid"] => {
-                reply_event(event, "/binduid xxxxxxxx\n八位userId（绝密）");
-            }
-            &["/bindqr"] => {
-                reply_event(event, "/bindqr SGWCMAID... (上机二维码解码内容)");
-            }
-            &["/binduid", user_id] if let Ok(user_id) = user_id.parse::<u32>() => {
+            &["/binduid", user_id] => {
+                if event.is_group() {
+                    reply_event(event, "不可以在群里使用该命令哦！请保护好自己的 userId");
+                    return None;
+                }
+                let Ok(user_id) = user_id.parse::<u32>() else {
+                    reply_event(event, "无效的 userId ~ 输入必须是数字");
+                    return None;
+                };
                 if user_id >= 20000000 || user_id < 10000000 {
                     reply_event(event, "无效的 userId ~ 应为八位数字");
                     return None;
@@ -112,6 +114,19 @@ async fn start() {
                 Ok(true) => reply_event(event, "解绑成功！"),
                 Ok(false) => reply_event(event, "未绑定水鱼 token 哦"),
             },
+
+            &["/binduid", ..] => {
+                reply_event(event, "用法: /binduid 1xxxxxxx\n必须在私聊中使用");
+            }
+            &["/bindqr", ..] => {
+                reply_event(event, "用法: /bindqr SGWCMAID...\n需解码微信二维码获取哦~")
+            }
+            &["/dfbind", ..] => {
+                reply_event(
+                    event,
+                    "用法: /dfbind [你的水鱼Token]\nhttps://www.diving-fish.com/maimaidx/prober/",
+                );
+            }
             _ => {}
         }
 
