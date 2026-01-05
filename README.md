@@ -4,15 +4,7 @@
 
 ## 环境
 
-本体依赖: rust (cargo, llvm, ...)
-
-pcrt图片生成: uv
-
-```bash
-uv run playwright install chromium
-# 启动渲染浏览器服务器
-uv run playwright run-server --port 51145
-```
+rust (cargo, llvm, ...)
 
 语音处理相关: [silk-codec](https://github.com/foyoux/silk-codec), ffmpeg
 
