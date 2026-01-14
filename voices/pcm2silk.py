@@ -1,6 +1,7 @@
 import subprocess
 from functools import reduce
 from os import cpu_count, listdir, path
+from pathlib import Path
 from multiprocessing import Pool
 
 rate = "24000"
@@ -14,7 +15,15 @@ def process_pcm(file_path: str):
     output = file_path.replace(".pcm", ".silk")
 
     subprocess.run(
-        ["./silk-encoder.exe", file_path, output, "-Fs_API", rate, "-rate", rate]
+        [
+            Path(__file__).parent.joinpath("silk-encoder.exe"),
+            file_path,
+            output,
+            "-Fs_API",
+            rate,
+            "-rate",
+            rate,
+        ]
     )
 
 
