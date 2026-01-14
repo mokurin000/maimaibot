@@ -33,6 +33,8 @@ async fn handle_region(event: Arc<MsgEvent>, client: &AsyncClient) -> Option<()>
         Ok(Some(user_id)) => {
             if let Ok(regions) = user_region(client, user_id).await {
                 reply_event(event, format!("历史游玩地区如下:\n\n{regions}"))
+            } else {
+                reply_event(event, format!("出错了！"))
             }
         }
     }

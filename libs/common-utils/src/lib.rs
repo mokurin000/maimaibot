@@ -7,7 +7,7 @@ use nyquest_preset::nyquest::AsyncClient;
 use sdgb_api::{
     ApiError,
     title::{
-        MaiVersionExt as _, Sdgb1_50,
+        MaiVersionExt as _, Sdgb1_53,
         methods::{APIExt, GetUserPreviewApiExt, GetUserRegionApiExt},
         model::UserRegion,
     },
@@ -49,7 +49,7 @@ const REGIONS: [&str; 32] = [
 ];
 
 pub async fn user_region(client: &AsyncClient, user_id: u32) -> Result<String, ApiError> {
-    let regions = Sdgb1_50::request_ext::<GetUserRegionApiExt>(
+    let regions = Sdgb1_53::request_ext::<GetUserRegionApiExt>(
         client,
         <GetUserRegionApiExt as APIExt>::Payload { user_id },
         user_id,
@@ -83,7 +83,7 @@ pub async fn user_preview(
     user_id: u32,
     token: impl Into<String>,
 ) -> Result<String, ApiError> {
-    let preview = Sdgb1_50::request_ext::<GetUserPreviewApiExt>(
+    let preview = Sdgb1_53::request_ext::<GetUserPreviewApiExt>(
         client,
         <GetUserPreviewApiExt as APIExt>::Payload {
             user_id,

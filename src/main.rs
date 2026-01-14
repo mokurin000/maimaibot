@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn snafu::Error>> {
         *log.sinks_mut() = vec![Arc::new(sink)];
         Ok(())
     })?;
-    spdlog::swap_default_logger(logger);
+    _ = spdlog::swap_default_logger(logger);
 
     let mut bot = {
         let config: kovi::bot::KoviConf = toml::from_str(&std::fs::read_to_string(config_path)?)?;
