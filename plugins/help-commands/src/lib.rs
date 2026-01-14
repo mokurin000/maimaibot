@@ -22,14 +22,7 @@ async fn main() {
 /tip - 随机 Phigros tip
 /maitip - 随机迪拉熊语录
 
-/playsystem 语音id - 指定系统音
-/playsystem 语音id 序号 - 指定系统音
-
-/playsound - 随机声音
-/playsound 伙伴id 语音id - 指定语音
-/playsound 伙伴id 语音id 序号 - 指定语音
-
-/playsndfx 音效id - 指定音效
+/soundhelp - 音声播放
 
 /pcrt - 绘制 PlayCount-Rating 曲线
 /pcrt linear - 线性X轴

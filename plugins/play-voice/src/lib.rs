@@ -44,6 +44,33 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
         .collect::<Vec<&str>>()
         .as_slice()
     {
+        &["/soundhelp"] => {
+            event.reply(
+                Message::new()
+                    .add_text(
+                        "音声播放
+系统音id: 1~265
+音效id: 1~454
+语音id: 80~266 部分伙伴没有全部语音
+
+/playsystem 语音id - 指定系统音
+/playsystem 语音id 序号 - 指定系统音
+
+/playsound - 随机声音
+/playsound 伙伴id 语音id - 指定语音
+/playsound 伙伴id 语音id 序号 - 指定语音
+
+/playsndfx 音效id - 指定音效",
+                    )
+                    .add_image(
+                        &absolute("./voices/partners.png")
+                            .unwrap_or_default()
+                            .to_string_lossy(),
+                    ),
+            );
+
+            return Some(());
+        }
         &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
 
         &["/playsystem", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
@@ -94,21 +121,7 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
     info!("selected: {}", sound_path.to_string_lossy());
 
     if !sound_path.exists() {
-        reply_event(
-            event,
-            Message::new()
-                .add_text(
-                    "语音文件未找到! 😟
-系统音id: 1~265
-语音id: 80~266 部分伙伴没有全部语音
-音效id: 1~454",
-                )
-                .add_image(
-                    &absolute("./voices/partners.png")
-                        .unwrap_or_default()
-                        .to_string_lossy(),
-                ),
-        );
+        reply_event(event, Message::new().add_text("语音文件未找到! 😟"));
         return None;
     }
 
