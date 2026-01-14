@@ -31,8 +31,8 @@ def process(file: Path):
 
 def main():
     dirs = [
-        Path("dump").joinpath(d)
-        for d in listdir("dump")
+        Path(".").joinpath(d)
+        for d in listdir(".")
         if d.startswith("Voice_") or d.startswith("Mai2")
     ]
     files = reduce(
