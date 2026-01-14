@@ -49,6 +49,10 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
             PathBuf::from(format!("voices/Voice_000001/stream_{voice}.silk")),
         )
         .ok()?,
+        &["/playsndfx", sfx_id] if let Ok(sfx) = sfx_id.parse::<u32>() => absolute(PathBuf::from(
+            format!("voices/Mai2Cue/Mai2Cue.acb#{sfx}.silk"),
+        ))
+        .ok()?,
         &["/playsound", partner_id, voice_id]
             if let Ok(partner) = partner_id.parse::<u32>()
                 && let Ok(voice) = voice_id.parse::<u32>() =>
@@ -110,6 +114,11 @@ static VOICE_FILES: LazyLock<Vec<PathBuf>> = LazyLock::new(|| {
         for entry in entries.flatten() {
             let path = entry.path();
             if entry.metadata().is_ok_and(|m| m.is_dir()) {
+                // skip sound effects
+                if path.ends_with("Mai2Cue") {
+                    continue;
+                }
+
                 fast_scan(out, path)?;
             } else {
                 if path.extension().is_some_and(|ext| ext == "silk") {

@@ -3,7 +3,7 @@
 
 use kovi::{Message, MsgEvent, PluginBuilder as plugin};
 use nyquest_preset::nyquest::AsyncClient;
-use sdgb_api::all_net::{QRCode, QRLoginError};
+use sdgb_api::all_net::{GetResponse, QRCode, QRLoginError};
 use spdlog::error;
 
 use common_utils::{reply_event, user_preview};
@@ -34,36 +34,13 @@ async fn start() {
                     },
                 ),
             },
-            &["/binduid", user_id] => {
-                if event.is_group() {
-                    reply_event(event, "不可以在群里使用该命令哦！请保护好自己的 userId");
-                    return None;
-                }
-                let Ok(user_id) = user_id.parse::<u32>() else {
-                    reply_event(event, "无效的 userId ~ 输入必须是数字");
-                    return None;
-                };
-                if user_id >= 20000000 || user_id < 10000000 {
-                    reply_event(event, "无效的 userId ~ 应为八位数字");
-                    return None;
-                }
-                if let Ok(Some(_)) = userdb::record_userid(sender_id, user_id).await {
-                    reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
-                } else if let Ok(preview) = user_preview(client, user_id).await {
-                    reply_event(
-                        event,
-                        Message::new()
-                            .add_text(format!("已成功绑定到 userId {user_id}\n\n{preview}")),
-                    );
-                }
-            }
             &["/bindqr", qrcode_content] => {
                 if !qrcode_content.starts_with("SGWCMAID") || qrcode_content.len() < 64 {
                     reply_event(event, "无效二维码！请检查是否为扫描结果");
                     return None;
                 }
                 match (QRCode { qrcode_content }).login(client).await {
-                    Ok(user_id) => {
+                    Ok(GetResponse { user_id, token, .. }) => {
                         let user_id = user_id as u32;
 
                         match userdb::record_userid(sender_id, user_id).await {
@@ -75,7 +52,7 @@ async fn start() {
                                 reply_event(event, "目前已绑定用户了喵~ 使用 /unbind 来解绑哦");
                             }
                             Ok(None) => {
-                                bind_user_id(client, event, user_id).await;
+                                bind_user_id(client, event, user_id, token).await;
                             }
                         }
                     }
@@ -115,9 +92,6 @@ async fn start() {
                 Ok(false) => reply_event(event, "未绑定水鱼 token 哦"),
             },
 
-            &["/binduid", ..] => {
-                reply_event(event, "用法: /binduid 1xxxxxxx\n必须在私聊中使用");
-            }
             &["/bindqr", ..] => {
                 reply_event(event, "用法: /bindqr SGWCMAID...\n需解码微信二维码获取哦~")
             }
@@ -134,9 +108,14 @@ async fn start() {
     });
 }
 
-async fn bind_user_id(client: &AsyncClient, event: impl AsRef<MsgEvent>, user_id: u32) {
+async fn bind_user_id(
+    client: &AsyncClient,
+    event: impl AsRef<MsgEvent>,
+    user_id: u32,
+    token: impl Into<String>,
+) {
     let mut message = Message::new().add_text("绑定成功~ ❤");
-    if let Ok(preview) = user_preview(client, user_id).await {
+    if let Ok(preview) = user_preview(client, user_id, token.into()).await {
         message = message.add_text("\n\n").add_text(&preview);
     }
     reply_event(event, message);

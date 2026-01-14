@@ -45,8 +45,8 @@ default-members = ["."]
 [workspace.dependencies]
 tokio = { version = "1", features = ["sync"] }
 
-nyquest-preset = { version = "0.3.0", features = ["async"] }
-sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", version = "0.1.0", default-features = false, features = [
+nyquest-preset = { version = "0.4.0", features = ["async"] }
+sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", default-features = false, features = [
     "tokio",
 ] }
 music-db = { git = "https://github.com/mokurin000/sdgb-utils-rs.git" }
@@ -56,7 +56,7 @@ serde_json = "1"
 
 fastrand = "2.3.0"
 snafu = "0.8.7"
-spdlog-rs = { version = "0.4.3", default-features = false, features = [
+spdlog-rs = { version = "0.5.2", default-features = false, features = [
     "level-debug",
     "release-level-info",
 ] }
@@ -73,3 +73,6 @@ lto = "thin"
 strip = true
 incremental = false
 codegen-units = 1
+
+[patch.crates-io]
+crabtime = { git = "https://github.com/wdanilo/crabtime.git", rev = "2ed856f5" }

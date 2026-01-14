@@ -13,7 +13,6 @@ async fn main() {
             "/help - 查看帮助
 
 /bindqr - 通过二维码绑定 userId
-/binduid - 通过 userId 绑定 userId
 /unbind - 解绑 userId
 
 /dfbind - 绑定水鱼 token
@@ -26,6 +25,7 @@ async fn main() {
 /playsound - 随机声音
 /playsound 语音id - 指定系统音
 /playsound 伙伴id 语音id - 指定语音
+/playsndfx 音效id - 指定音效
 
 /pcrt - 绘制 PlayCount-Rating 曲线
 /pcrt linear - 线性X轴

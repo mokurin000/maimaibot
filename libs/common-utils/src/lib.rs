@@ -78,10 +78,17 @@ pub async fn user_region(client: &AsyncClient, user_id: u32) -> Result<String, A
     Ok(output)
 }
 
-pub async fn user_preview(client: &AsyncClient, user_id: u32) -> Result<String, ApiError> {
+pub async fn user_preview(
+    client: &AsyncClient,
+    user_id: u32,
+    token: impl Into<String>,
+) -> Result<String, ApiError> {
     let preview = Sdgb1_50::request_ext::<GetUserPreviewApiExt>(
         client,
-        <GetUserPreviewApiExt as APIExt>::Payload { user_id },
+        <GetUserPreviewApiExt as APIExt>::Payload {
+            user_id,
+            token: Some(token.into()),
+        },
         user_id,
     )
     .await?;
