@@ -46,7 +46,7 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
     {
         &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
         &["/playsound", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
-            PathBuf::from(format!("voices/Voice_000001/stream_{voice}.silk")),
+            PathBuf::from(format!("voices/Voice_000001/Voice_000001.awb#{voice}.silk")),
         )
         .ok()?,
         &["/playsndfx", sfx_id] if let Ok(sfx) = sfx_id.parse::<u32>() => absolute(PathBuf::from(
@@ -58,7 +58,7 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
                 && let Ok(voice) = voice_id.parse::<u32>() =>
         {
             absolute(PathBuf::from(format!(
-                "voices/Voice_Partner_{partner:06}/stream_{voice}.silk"
+                "voices/Voice_Partner_{partner:06}/Voice_Partner_{partner:06}.awb#{voice}.silk"
             )))
             .ok()?
         }
@@ -77,7 +77,7 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
             Message::new()
                 .add_text(
                     "语音文件未找到! 😟
-系统音id: 1~74,76~159 语音id: 1~118,
+系统音id: 1~73,77~159 语音id: 1~118,
 部分伙伴没有全部语音",
                 )
                 .add_image(
