@@ -45,20 +45,42 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
         .as_slice()
     {
         &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
-        &["/playsound", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
-            PathBuf::from(format!("voices/Voice_000001/Voice_000001.awb#{voice}.silk")),
+
+        &["/playsystem", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
+            PathBuf::from(format!("voices/Voice_000001/VO_{voice:06}_1.silk")),
         )
         .ok()?,
+        &["/playsystem", voice_id, num]
+            if let Ok(voice) = voice_id.parse::<u32>()
+                && let Ok(num) = num.parse::<u32>() =>
+        {
+            absolute(PathBuf::from(format!(
+                "voices/Voice_000001/VO_{voice:06}_{num}.silk"
+            )))
+            .ok()?
+        }
+
         &["/playsndfx", sfx_id] if let Ok(sfx) = sfx_id.parse::<u32>() => absolute(PathBuf::from(
             format!("voices/Mai2Cue/Mai2Cue.acb#{sfx}.silk"),
         ))
         .ok()?,
+
         &["/playsound", partner_id, voice_id]
             if let Ok(partner) = partner_id.parse::<u32>()
                 && let Ok(voice) = voice_id.parse::<u32>() =>
         {
             absolute(PathBuf::from(format!(
-                "voices/Voice_Partner_{partner:06}/Voice_Partner_{partner:06}.awb#{voice}.silk"
+                "voices/Voice_Partner_{partner:06}/VO_{voice:06}_1.silk"
+            )))
+            .ok()?
+        }
+        &["/playsound", partner_id, voice_id, num]
+            if let Ok(partner) = partner_id.parse::<u32>()
+                && let Ok(voice) = voice_id.parse::<u32>()
+                && let Ok(num) = num.parse::<u32>() =>
+        {
+            absolute(PathBuf::from(format!(
+                "voices/Voice_Partner_{partner:06}/VO_{voice:06}_{num}.silk"
             )))
             .ok()?
         }
@@ -77,8 +99,9 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
             Message::new()
                 .add_text(
                     "语音文件未找到! 😟
-系统音id: 1~73,77~159 语音id: 1~118,
-部分伙伴没有全部语音",
+系统音id: 1~265
+语音id: 80~266 部分伙伴没有全部语音
+音效id: 1~454",
                 )
                 .add_image(
                     &absolute("./voices/partners.png")
