@@ -66,13 +66,21 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
                         &absolute("./voices/partners.png")
                             .unwrap_or_default()
                             .to_string_lossy(),
+                    )
+                    .add_image(
+                        &absolute("./voices/system-voice.png")
+                            .unwrap_or_default()
+                            .to_string_lossy(),
+                    )
+                    .add_image(
+                        &absolute("./voices/partner-voice.png")
+                            .unwrap_or_default()
+                            .to_string_lossy(),
                     ),
             );
 
             return Some(());
         }
-        &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
-
         &["/playsystem", voice_id] if let Ok(voice) = voice_id.parse::<u32>() => absolute(
             PathBuf::from(format!("voices/Voice_000001/VO_{voice:06}_1.silk")),
         )
@@ -92,6 +100,7 @@ async fn handle_msg(event: Arc<MsgEvent>) -> Option<()> {
         ))
         .ok()?,
 
+        &["/playsound"] => fastrand::choice(&*VOICE_FILES)?.into(),
         &["/playsound", partner_id, voice_id]
             if let Ok(partner) = partner_id.parse::<u32>()
                 && let Ok(voice) = voice_id.parse::<u32>() =>
