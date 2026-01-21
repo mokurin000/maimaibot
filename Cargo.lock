@@ -1192,7 +1192,7 @@ dependencies = [
 [[package]]
 name = "music-db"
 version = "0.1.0"
-source = "git+https://git.fragrance.moe/mokurin000/sdgb-utils-rs#82e2db7c902430c9af9d96c9a808ea01ebcdd503"
+source = "git+https://git.fragrance.moe/mokurin000/sdgb-utils-rs#adcb715d2cde125ed3f6e47e2170c65b9f7ff6b2"
 dependencies = [
  "rust_decimal",
  "rustc-hash",
@@ -1572,9 +1572,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.105"
+version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "535d180e0ecab6268a3e718bb9fd44db66bbbc256257165fc699dadf70d16fe7"
+checksum = "8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934"
 dependencies = [
  "unicode-ident",
 ]
@@ -1784,7 +1784,7 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 [[package]]
 name = "sdgb-api"
 version = "0.1.0"
-source = "git+https://git.fragrance.moe/mokurin000/sdgb-utils-rs#82e2db7c902430c9af9d96c9a808ea01ebcdd503"
+source = "git+https://git.fragrance.moe/mokurin000/sdgb-utils-rs#adcb715d2cde125ed3f6e47e2170c65b9f7ff6b2"
 dependencies = [
  "aes",
  "cbc",
