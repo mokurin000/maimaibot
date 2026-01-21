@@ -13,7 +13,6 @@ snafu = { workspace = true }
 ping = { version = "0.1.0", path = "plugins/ping" }
 bind_user = { version = "0.1.0", path = "plugins/bind_user" }
 phigros-tips = { version = "0.1.0", path = "plugins/phigros-tips" }
-user-region = { version = "0.1.0", path = "plugins/user-region" }
 help-commands = { version = "0.1.0", path = "plugins/help-commands" }
 play-voice = { version = "0.1.0", path = "plugins/play-voice" }
 import-records = { version = "0.1.0", path = "plugins/import-records" }
@@ -22,7 +21,6 @@ pcrt-plot = { version = "0.1.0", path = "plugins/pcrt-plot" }
 userdb = { workspace = true }
 argh = "0.1.13"
 toml = "0.9.5"
-qixi-gacha = { version = "0.1.0", path = "plugins/qixi-gacha" }
 
 [workspace]
 members = [
@@ -32,12 +30,10 @@ members = [
     "plugins/bind_user",
     "plugins/phigros-tips",
     "plugins/ping",
-    "plugins/user-region",
     "plugins/help-commands",
     "plugins/play-voice",
     "plugins/import-records",
     "plugins/pcrt-plot",
-    "plugins/qixi-gacha",
     ".",
 ]
 default-members = ["."]
@@ -46,10 +42,10 @@ default-members = ["."]
 tokio = { version = "1", features = ["sync"] }
 
 nyquest-preset = { version = "0.4.0", features = ["async"] }
-sdgb-api = { git = "https://github.com/mokurin000/sdgb-utils-rs.git", default-features = false, features = [
+sdgb-api = { git = "https://git.fragrance.moe/mokurin000/sdgb-utils-rs", default-features = false, features = [
     "tokio",
 ] }
-music-db = { git = "https://github.com/mokurin000/sdgb-utils-rs.git" }
+music-db = { git = "https://git.fragrance.moe/mokurin000/sdgb-utils-rs" }
 
 serde = "1"
 serde_json = "1"

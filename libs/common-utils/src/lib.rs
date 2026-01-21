@@ -88,6 +88,7 @@ pub async fn user_preview(
         <GetUserPreviewApiExt as APIExt>::Payload {
             user_id,
             token: Some(token.into()),
+            ..Default::default()
         },
         user_id,
     )

@@ -10,9 +10,13 @@ rust (cargo, llvm, ...)
 
 ## 编译
 
-细心的你可能已经发现了，该项目部分插件依赖于私有仓库。
+1.53 以来，舞萌再无科技攻击或服务器 DDoS 阵亡
+sdgb-utils-rs 已开源
 
-该项目暂不提供 feature gate 一键阉割相关功能。
+```bash
+cargo fetch --locked
+cargo build --release --frozen
+```
 
 ## 语音提取
 

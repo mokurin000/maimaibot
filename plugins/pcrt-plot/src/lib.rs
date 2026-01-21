@@ -71,6 +71,7 @@ async fn start() {
             Ok(r) => r,
             Err(e) => {
                 reply_event(event, "内部错误😭 土豆服务器爆炸了");
+                error!("API Error: {e}");
                 return Report::from_error(e);
             }
         };
