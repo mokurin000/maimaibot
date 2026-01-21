@@ -17,6 +17,8 @@ use crate::plot::draw_chart;
 
 pub const CACHE_MINUTES: u64 = 60; // 1 hour
 
+// TODO: fix Logout, implement QRCode scan,
+// a login is needed to fetch user all music.
 #[kovi::plugin]
 async fn start() {
     let client = shared_client::nyquest_client().await;
