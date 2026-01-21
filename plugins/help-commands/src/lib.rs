@@ -20,14 +20,12 @@ async fn main() {
 /dfimport - 导入成绩记录到水鱼
 
 /tip - 随机 Phigros tip
-/maitip - 随机迪拉熊语录
 
 /soundhelp - 音声播放
 
 /pcrt - 绘制 PlayCount-Rating 曲线
 /pcrt linear - 线性X轴
-/pcrt log    - 对数X轴
-盒我 - 获取账户登录记录",
+/pcrt log    - 对数X轴",
         );
     });
 }

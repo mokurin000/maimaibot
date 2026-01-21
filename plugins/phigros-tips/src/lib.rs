@@ -1,6 +1,6 @@
 use kovi::PluginBuilder as plugin;
 
-use crate::tips::{MAITIPS, TIPS};
+use crate::tips::TIPS;
 
 #[kovi::plugin]
 async fn main() {
@@ -8,9 +8,6 @@ async fn main() {
         match event.borrow_text()? {
             "/tip" => {
                 event.reply(fastrand::choice(TIPS).unwrap_or("咕咕"));
-            }
-            "/maitip" => {
-                event.reply(fastrand::choice(MAITIPS).unwrap_or("咕咕"));
             }
             _ => {}
         }
